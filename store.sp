@@ -1,7 +1,7 @@
 /**
  * =============================================================================
  * SourceMod CSS for Day of Defeat Source
- * (C)2010 - Dog - www.thevilluns.org
+ * (C)2010 - Dog - www.theville.org
  * (C)2010 - Andersso - www.europeanmarines.eu
  *
  * SourceMod (C)2004-2008 AlliedModders LLC.  All rights reserved.

@@ -1,7 +1,7 @@
 /**
  * =============================================================================
  * SourceMod Left4DoD for Day of Defeat Source
- * (C)2009 - 2010 Dog - www.thevilluns.org
+ * (C)2009 - 2010 Dog - www.theville.org
  *
  * SourceMod (C)2004-2008 AlliedModders LLC.  All rights reserved.
  * =============================================================================
@@ -47,7 +47,7 @@ public PlayerSayEvent(Handle:event, const String:name[], bool:dontBroadcast)
 	if (StrEqual(text, "!motd") || StrEqual(text, "motd"))
 	{
 		if (client > 0)
-			ShowMOTDPanel(client, "MOTD", "http://www.thevilluns.org/game/left4dod.html", MOTDPANEL_TYPE_URL );
+			ShowMOTDPanel(client, "MOTD", "https://www.theville.org/game/left4dod.html", MOTDPANEL_TYPE_URL );
 	}
 	
 	if (StrContains(text, "error", false) != -1)

@@ -1,7 +1,7 @@
 /**
  * =============================================================================
  * SourceMod Left4DoD for Day of Defeat Source
- * (C)2009 - 2010 Dog - www.thevilluns.org
+ * (C)2009 - 2010 Dog - www.theville.org
  *
  * SourceMod (C)2004-2008 AlliedModders LLC.  All rights reserved.
  * =============================================================================
@@ -276,7 +276,7 @@ public MenuHandler_Equip(Handle:menu, MenuAction:action, param1, param2)
 		}
 		else if (StrEqual(info, "ville"))
 		{
-			ShowMOTDPanel(param1, "Visit TheVilluns.Org", "http://www.thevilluns.org/forums/viewforum.php?f=3", MOTDPANEL_TYPE_URL );
+			ShowMOTDPanel(param1, "Visit TheVille.org", "https://www.theville.org/forums/viewforum.php?f=3", MOTDPANEL_TYPE_URL );
 		}
 		else if (StrEqual(info, "join"))
 		{

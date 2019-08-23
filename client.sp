@@ -1,7 +1,7 @@
 /**
  * =============================================================================
  * SourceMod Left4DoD for Day of Defeat Source
- * (C)2009 - 2010 Dog - www.thevilluns.org
+ * (C)2009 - 2010 Dog - www.theville.org
  *
  * SourceMod (C)2004-2008 AlliedModders LLC.  All rights reserved.
  * =============================================================================
@@ -609,11 +609,11 @@ public DisplayIntro(any:client)
 	
 	if (g_IsMember[client] > 0)
 	{
-		text3		= "Visit www.thevilluns.org!";
+		text3		= "Visit www.theville.org!";
 	}
 	else
 	{
-		text3		= "Welcome to TheVilluns.Org!";
+		text3		= "Welcome to TheVille.org!";
 	}
 	
 

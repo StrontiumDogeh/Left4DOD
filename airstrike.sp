@@ -1,7 +1,7 @@
 /**
  * =============================================================================
  * SourceMod Left4DoD for Day of Defeat Source
- * (C)2009 - 2010 Dog - www.thevilluns.org
+ * (C)2009 - 2010 Dog - www.theville.org
  *
  * SourceMod (C)2004-2008 AlliedModders LLC.  All rights reserved.
  * =============================================================================

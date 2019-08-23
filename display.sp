@@ -1,7 +1,7 @@
 /**
  * =============================================================================
  * SourceMod Left4DoD for Day of Defeat Source
- * (C)2009 - 2010 Dog - www.thevilluns.org
+ * (C)2009 - 2010 Dog - www.theville.org
  *
  * SourceMod (C)2004-2008 AlliedModders LLC.  All rights reserved.
  * =============================================================================
@@ -181,7 +181,7 @@ public Action:RandomHelp(Handle:Timer, any:client)
 		switch (randomnumber)
 		{
 			case 0:
-				PrintHelp(client, "*Visit TheVilluns.Org for more information", 2);
+				PrintHelp(client, "*Visit www.theville.org for more information", 2);
 
 			case 1:
 				PrintHelp(client, "*[HINT] Say \x04!menu\x01 for the Menu", 0);
@@ -196,7 +196,7 @@ public Action:RandomHelp(Handle:Timer, any:client)
 				PrintHelp(client, "*DoDS:Left4DoD Mod written by Dog", 2);
 				
 			case 5:
-				PrintHelp(client, "*Got problems with L4DoD? Go to www.thevilluns.org", 2);
+				PrintHelp(client, "*Got problems with L4DoD? Go to www.theville.org", 2);
 		}
 		
 		if (GetClientTeam(client) == AXIS)

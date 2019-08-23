@@ -20,7 +20,7 @@ public Plugin:myinfo = {
 	author      = "Dog",
 	description = "Standalone Plugin for creating list of Left4DoD Group Members",
 	version     = PLUGIN_VERSION,
-	url         = "http://www.thevilluns.org/"
+	url         = "https://www.theville.org/"
 };
 
 public OnPluginStart()
