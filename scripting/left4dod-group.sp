@@ -57,7 +57,7 @@ public OnClientPostAdminCheck(client)
 	if (!IsFakeClient(client))
 	{
 		new String:authid[64];
-		GetClientAuthString(client, authid, sizeof(authid));
+		GetClientAuthId(client, AuthId_Steam2, authid, sizeof(authid));
 
 		//Grabs details from the database
 		if (hDatabase != INVALID_HANDLE)

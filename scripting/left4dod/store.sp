@@ -237,7 +237,7 @@ public SendToDatabase(iClient)
 	if (iClient > 0 && !IsFakeClient(iClient) && g_iMoney[iClient] > 0)
 	{
 		new String:query[1024], String:authid[64];
-		GetClientAuthString(iClient, authid, sizeof(authid));
+		GetClientAuthId(iClient, AuthId_Steam2, authid, sizeof(authid));
 
 		new String:clientname[128];
 		Format(clientname, sizeof(clientname), "%N", iClient);

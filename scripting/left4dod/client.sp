@@ -93,7 +93,7 @@ public OnClientPostAdminCheck(client)
 		}
 
 		new String:authid[64];
-		GetClientAuthString(client, authid, sizeof(authid));
+		GetClientAuthId(client, AuthId_Steam2, authid, sizeof(authid));
 
 		new member_type = 0;
 		member_type = GetGroupData(authid);
