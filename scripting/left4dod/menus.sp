@@ -306,10 +306,6 @@ public MenuHandler_Equip(Handle:menu, MenuAction:action, param1, param2)
 		{
 			DisplaySettingsMenu(param1);
 		}
-		else if (StrEqual(info, "votemenu"))
-		{
-			DisplayVotingMenu(param1);
-		}
 
 		else
 		{
