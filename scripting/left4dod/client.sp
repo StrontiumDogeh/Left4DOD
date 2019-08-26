@@ -95,22 +95,6 @@ public OnClientPostAdminCheck(client)
 		new String:authid[64];
 		GetClientAuthId(client, AuthId_Steam2, authid, sizeof(authid));
 
-		new member_type = 0;
-		member_type = GetGroupData(authid);
-
-		if (member_type == 2)
-		{
-			g_IsMember[client] = 2;
-		}
-		else if (member_type == 1)
-		{
-			g_IsMember[client] = 1;
-		}
-		else if (member_type == 0)
-		{
-			g_IsMember[client] = 0;
-		}
-
 		//Grabs details from the database
 		if (hDatabase != INVALID_HANDLE)
 		{
@@ -332,6 +316,7 @@ public GetPlayerStats(Handle:owner, Handle:hQuery, const String:error[], any:cli
 				while(SQL_FetchRow(hQuery))
 				{
 					g_iMoney[client] = SQL_FetchInt(hQuery, 2);
+					g_IsMember[client] = SQL_FetchInt(hQuery, 3);
 				}
 
 				//PrintToServer( "[L4DOD] %N [%i] found in Database: ", client, g_iMoney[client]);
@@ -353,6 +338,8 @@ public GetPlayerStats(Handle:owner, Handle:hQuery, const String:error[], any:cli
 
 		//Try database again...
 	}
+
+	Steam_RequestGroupStatus(client, STEAMGROUP);
 }
 
 //Player has fully disconnected
@@ -502,6 +489,49 @@ public OnClientDisconnect(client)
 	SDKUnhook(client, SDKHook_OnTakeDamage, OnTakeDamage);
 
 	g_ShowSprite[client] = false;
+}
+
+public Steam_GroupStatusResult(client, groupAccountID, bool:groupMember, bool:groupOfficer)
+{
+	if (client > 0 && IsClientConnected(client) && !IsFakeClient(client))
+	{
+		if (groupAccountID == STEAMGROUP && groupMember)
+		{
+			g_IsMember[client]  = 1;
+		}
+		else
+		{
+			g_IsMember[client]  = 0;
+		}
+
+		if (groupAccountID == STEAMGROUP && groupOfficer)
+		{
+			g_IsMember[client]  = 2;
+		}
+
+		//PrintToServer( "GROUP: After processing %N Membership is now [%i] ", client, g_IsMember[client]);
+
+		SetGroupData(client);
+	}
+}
+
+SetGroupData(client)
+{
+	if (g_IsMember[client]  > 0)
+	{
+		new String:query[1024];
+
+		new String:clientname[128];
+		Format(clientname, sizeof(clientname), "%N", client);
+
+		new String:authid[64];
+		GetClientAuthId(client, AuthId_Steam2, authid, sizeof(authid));
+
+		Format(query, sizeof(query), "UPDATE players SET authid='%s', playername='%s', money='%i', member='%i') WHERE authid='%s');", authid, clientname, g_iMoney[client], g_IsMember[client], authid);
+
+		//PrintToServer("Query: %s", query);
+		SQL_TQuery(hDatabase, AddToDatabase, query, client, DBPrio_High);
+	}
 }
 
 public AddToDatabase(Handle:owner, Handle:hQuery, const String:error[], any:client)
@@ -714,31 +744,4 @@ public Action:TurnOffMessage(Handle:timer, any:client)
 	g_getIntro[client] = false;
 
 	return Plugin_Handled;
-}
-
-GetGroupData(const String:auth[])
-{
-	new Handle:h_KV = CreateKeyValues("1174424");
-
-	new member_type = 0;
-
-	decl String:datapath[PLATFORM_MAX_PATH];
-	BuildPath(Path_SM, datapath, PLATFORM_MAX_PATH, "configs/l4dod_group.txt");
-	FileToKeyValues(h_KV, datapath);
-
-	KvRewind(h_KV);
-
-	///////////////////////////////////////////////////////////////// Get members
-	if (!KvJumpToKey(h_KV, "members"))
-	{
-		CloseHandle(h_KV);
-		PrintToServer("[L4DOD] UNABLE TO LOAD MEMBERS - INCORRECT FILE LAYOUT");
-		return false;
-	}
-
-	member_type = KvGetNum(h_KV, auth, 0);
-
-	CloseHandle(h_KV);
-
-	return member_type;
 }

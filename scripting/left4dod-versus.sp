@@ -43,6 +43,9 @@
 #include <clientprefs>
 #include <morecolors>
 
+#define AUTOLOAD_EXTENSIONS
+#include <steamtools>
+
 //See also line 879
 #undef REQUIRE_EXTENSIONS
 #include <dodhooks>
@@ -50,6 +53,8 @@
 #define PLUGIN_VERSION "5.3.200"
 
 #define DEBUG 0
+
+#define STEAMGROUP 1174424
 
 #define MAXWEAPONS 45
 
