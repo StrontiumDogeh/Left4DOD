@@ -9,7 +9,7 @@
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, version 3.0, as published by the
  * Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
@@ -31,16 +31,16 @@
 // ################################################################################
 
 public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:fDamage, &damagetype, &weapon, Float:damageForce[3], Float:damagePosition[3])
-{	
+{
 	//Scale the damage
 	fDamage *= g_fDamageScale[victim];
-	
+
 	//Player on Player damage
 	if ((victim > 0 && victim < MaxClients+1))
-	{			
+	{
 		if (attacker > 0 && attacker < MaxClients+1)
 		{
-			//AXIS v AXIS 
+			//AXIS v AXIS
 			if (GetClientTeam(attacker) == AXIS && GetClientTeam(victim) == AXIS)
 			{
 				if (attacker != victim)
@@ -49,41 +49,41 @@ public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:fDamage, &damag
 					return Plugin_Changed;
 				}
 			}
-			
-			//ALLIES v ALLIES  
+
+			//ALLIES v ALLIES
 			else if (GetClientTeam(attacker) == ALLIES && GetClientTeam(victim) == ALLIES)
 			{
 				if (victim != attacker)
-				{				
-					new Handle:pack;			
+				{
+					new Handle:pack;
 					CreateDataTimer(0.1, DealDamage, pack, TIMER_FLAG_NO_MAPCHANGE);
 					WritePackCell(pack, attacker);
 					WritePackCell(pack, 0);
 					WritePackCell(pack, 5);
 					WritePackCell(pack, DMG_SLASH);
 					WritePackString(pack, "weapon_amerknife");
-					
+
 					//LogToGame("\"%L\" triggered \"TeamWound\"", attacker);
-										
+
 					fDamage *= 0.0;
 					return Plugin_Changed;
 				}
 			}
-						
+
 			// AXIS VICTIMS
 			else if (GetClientTeam(attacker) == ALLIES && GetClientTeam(victim) == AXIS)
-			{		
+			{
 				//Reduce player damage if teamkilling is above normal.
 				if (g_tkAmount[attacker] > 0)
 				{
 					fDamage /= g_tkAmount[attacker];
 				}
-						
+
 				decl String:Weapon[32];
 				GetClientWeapon(attacker, Weapon, sizeof(Weapon));
-				
+
 				new class = GetEntProp(attacker, Prop_Send, "m_iPlayerClass");
-				
+
 				if (g_ZombieType[victim] == SKELETON || g_ZombieType[victim] == GASMAN)
 				{
 					if (IsFakeClient(victim))
@@ -96,7 +96,7 @@ public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:fDamage, &damag
 							AttachParticle(victim, "rockettrail", 2.0);
 						}
 					}
-				}	
+				}
 				else if (g_ZombieType[victim] == WITCH)
 				{
 					if (IsFakeClient(victim))
@@ -129,7 +129,7 @@ public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:fDamage, &damag
 						}
 					}
 				}
-				
+
 				//If Zombies are in spawn they take no fDamage from nades
 				if(StrEqual(Weapon, "weapon_frag_us") || StrEqual(Weapon, "weapon_frag_ger")
 				|| StrEqual(Weapon, "weapon_riflegren_us") || StrEqual(Weapon, "weapon_riflegren_ger")
@@ -138,12 +138,12 @@ public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:fDamage, &damag
 					new Float:victimpos[3];
 					GetClientAbsOrigin(victim, victimpos);
 					if (CheckLocationNearAxisSpawn(victimpos, 600.0))
-					{	
+					{
 						fDamage *= 0.0;
 						return Plugin_Changed;
-					}	
+					}
 				}
-				
+
 				else if(StrEqual(Weapon, "weapon_mg42") || StrEqual(Weapon, "weapon_30cal"))
 				{
 					if (class != MG && !g_AllowedMG[attacker])
@@ -152,7 +152,7 @@ public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:fDamage, &damag
 						return Plugin_Changed;
 					}
 				}
-				
+
 				else if(StrEqual(Weapon, "weapon_k98_scoped") || StrEqual(Weapon, "weapon_spring"))
 				{
 					if (class != SNIPER && !g_AllowedSniper[attacker])
@@ -166,7 +166,7 @@ public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:fDamage, &damag
 						return Plugin_Changed;
 					}
 				}
-				
+
 				else if(StrEqual(Weapon, "weapon_bazooka") || StrEqual(Weapon, "weapon_pschreck"))
 				{
 					if (class != ROCKET && !g_AllowedRocket[attacker])
@@ -180,10 +180,10 @@ public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:fDamage, &damag
 						return Plugin_Changed;
 					}
 				}
-				
+
 				else if(StrEqual(Weapon, "weapon_amerknife") || StrEqual(Weapon, "weapon_spade"))
 				{
-					if (GetEntProp(attacker, Prop_Send, "m_bProne") == 1 || GetEntProp(attacker, Prop_Send, "m_bDucked") == 1 
+					if (GetEntProp(attacker, Prop_Send, "m_bProne") == 1 || GetEntProp(attacker, Prop_Send, "m_bDucked") == 1
 						|| GetEntProp(attacker, Prop_Send, "m_bDucking") == 1)
 					{
 							fDamage *= 0.2;
@@ -191,18 +191,18 @@ public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:fDamage, &damag
 					}
 				}
 			}
-			
+
 			//ALLIES VICTIMS
 			else if (GetClientTeam(attacker) == AXIS && GetClientTeam(victim) == ALLIES)
 			{
 				decl String:Weapon[64];
 				GetClientWeapon(attacker, Weapon, sizeof(Weapon));
-				
+
 				if(StrEqual(Weapon, "weapon_amerknife") || StrEqual(Weapon, "weapon_spade"))
 				{
 					//Backstab?
 					new Float:attacker_pos[3];
-					new Float:victim_pos[3];          
+					new Float:victim_pos[3];
 					new Float:victim_fwd[3];
 					new Float:victim_eyes[3];
 					new Float:angle_diff;
@@ -216,7 +216,7 @@ public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:fDamage, &damag
 					MakeVectorFromPoints(victim_pos, attacker_pos, angle_vec);
 					NormalizeVector(angle_vec, angle_vec);
 					angle_diff = GetVectorDotProduct(victim_fwd, angle_vec);
-					
+
 					if (angle_diff < 0.0)
 					{
 						if (IsFakeClient(attacker))
@@ -230,26 +230,26 @@ public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:fDamage, &damag
 							fDamage *= 1.5;
 							return Plugin_Changed;
 						}
-					} 	
-					
+					}
+
 					if (g_ZombieType[attacker] == UNG)
 					{
 						fDamage *= 16.0;
 						ScaleVector(damageForce, 10.0);
 						return Plugin_Changed;
 					}
-					
+
 					else if (g_ZombieType[attacker] == INFECTEDONE && !g_isInfected[victim])
 					{
 						fDamage *= 0.8;
 						g_isInfected[victim] = true;
 						SetEntityModel(victim, "models/player/german_traitor.mdl");
-						
+
 						if (g_Hints[victim])
 							PrintHelp(victim, "*You have been {green}infected{yellow} - you will slowly {green}lose health {yellow}until you get a {fullred}Health Pack or Zombie Blood", 0);
 						return Plugin_Changed;
 					}
-					
+
 					else
 					{
 						if (IsFakeClient(attacker))
@@ -264,46 +264,46 @@ public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:fDamage, &damag
 						}
 					}
 				}
-				else if(StrEqual(Weapon, "weapon_mg42") || StrEqual(Weapon, "weapon_30cal") 
-				|| StrEqual(Weapon, "weapon_garand") 	|| StrEqual(Weapon, "weapon_k98") 
-				|| StrEqual(Weapon, "weapon_thompson") || StrEqual(Weapon, "weapon_mp40") 
-				|| StrEqual(Weapon, "weapon_bar") || StrEqual(Weapon, "weapon_mp44") 
+				else if(StrEqual(Weapon, "weapon_mg42") || StrEqual(Weapon, "weapon_30cal")
+				|| StrEqual(Weapon, "weapon_garand") 	|| StrEqual(Weapon, "weapon_k98")
+				|| StrEqual(Weapon, "weapon_thompson") || StrEqual(Weapon, "weapon_mp40")
+				|| StrEqual(Weapon, "weapon_bar") || StrEqual(Weapon, "weapon_mp44")
 				|| StrEqual(Weapon, "weapon_bazooka") || StrEqual(Weapon, "weapon_pschreck")
 				|| StrEqual(Weapon, "weapon_k98_scoped") || StrEqual(Weapon, "weapon_spring"))
 				{
 					fDamage *= 0.0;
 					return Plugin_Changed;
 				}
-				
+
 				else if (StrEqual(Weapon, "env_explosion"))
 				{
 					new Float:victimpos[3];
 					GetClientAbsOrigin(victim, victimpos);
 					if (CheckLocationNearAlliedSpawn(victimpos, 300.0))
-					{	
+					{
 						fDamage *= 0.0;
 						return Plugin_Changed;
-					}	
+					}
 				}
-				
+
 				else if (StrEqual(Weapon, "weapon_gasbomb"))
 				{
 					new Float:victimpos[3];
 					GetClientAbsOrigin(victim, victimpos);
 					if (CheckLocationNearAlliedSpawn(victimpos, 300.0))
-					{	
+					{
 						fDamage *= 0.0;
 						return Plugin_Changed;
-					}	
+					}
 				}
-				
+
 				if (!g_canUseWeapon[attacker])
 				{
 					fDamage *= 0.0;
 					return Plugin_Changed;
 				}
 			}
-			
+
 			//########################### APPLY THE DAMAGE ######################################
 			new Float:newHealth = float(g_Health[victim]) - fDamage;
 			 // Is the player supposed to die?
@@ -311,23 +311,23 @@ public Action:OnTakeDamage(victim, &attacker, &inflictor, &Float:fDamage, &damag
 			{
 					// Set the damage required to kill the player.
 					fDamage = float(GetClientHealth(victim));
-				   
+
 					return Plugin_Changed;
 			}
-		   
+
 			// Will the health be rounded down to zero?
 			if (GetClientHealth(victim) - RoundFloat(fDamage) <= 0)
 			{
 					g_Health[victim] = RoundFloat(newHealth);
-				   
+
 					return Plugin_Handled;
 			}
-			
+
 			SetHealth(victim, g_Health[victim]);
 			g_Health[victim] = RoundFloat(newHealth);
 			return Plugin_Changed;
 		}
-	
+
 		else if (damagetype & DMG_FALL == DMG_FALL)
 		{
 			if (GetClientTeam(victim) == AXIS)
@@ -343,7 +343,7 @@ SetHealth(client, health)
 	{
 		if (health > g_HealthMax[client])
 			health = g_HealthMax[client];
-			
+
 		SetEntityHealth(client, health * 100 / g_HealthMax[client]);
 		g_Health[client] = health;
 	}
@@ -358,23 +358,23 @@ public Action:DealDamage(Handle:timer, Handle:pack)
 {
 	ResetPack(pack);
 	new String:weapon[64];
-	
+
 	new victim = ReadPackCell(pack);
 	new attacker = ReadPackCell(pack);
 	new damage = ReadPackCell(pack);
 	new dmg_type = ReadPackCell(pack);
 	ReadPackString(pack, weapon, sizeof(weapon));
-	
+
 	new PointHurt = CreateEntityByName("point_hurt");
 	if (PointHurt != -1)
 	{
 		DispatchKeyValue(PointHurt,"DamageTarget","hurtme");
 		DispatchSpawn(PointHurt);
 	}
-	
-	if (victim > 0 && victim < 33 
+
+	if (victim > 0 && victim < 33
 		&& attacker > 0 && attacker < 33
-		&& IsClientInGame(victim) && IsPlayerAlive(victim) 
+		&& IsClientInGame(victim) && IsPlayerAlive(victim)
 		&& IsClientInGame(attacker)
 		&& damage > 0)
 	{
@@ -382,22 +382,22 @@ public Action:DealDamage(Handle:timer, Handle:pack)
 		IntToString(damage,dmg_str,16);
 		new String:dmg_type_str[32];
 		IntToString(dmg_type,dmg_type_str,32);
-				
+
 		if(IsValidEdict(PointHurt))
 		{
 			DispatchKeyValue(victim,"targetname","hurtme");
 			DispatchKeyValue(PointHurt,"Damage",dmg_str);
 			DispatchKeyValue(PointHurt,"DamageType",dmg_type_str);
-			
+
 			if(!StrEqual(weapon,""))
 				DispatchKeyValue(PointHurt,"classname",weapon);
 			else
 				DispatchKeyValue(PointHurt,"classname","point_hurt");
-				
+
 			AcceptEntityInput(PointHurt,"Hurt",(attacker>0)?attacker:-1);
-			
+
 			DispatchKeyValue(victim,"targetname","donthurtme");
-			
+
 			AcceptEntityInput(PointHurt, "Kill");
 		}
 	}
@@ -406,10 +406,10 @@ public Action:DealDamage(Handle:timer, Handle:pack)
 
 public Action:Pause(Handle:timer,any:client)
 {
-	if (IsClientInGame(client)) 
+	if (IsClientInGame(client))
 	{
 		g_PauseMovement[client] = false;
 	}
-	
+
 	return Plugin_Handled;
 }

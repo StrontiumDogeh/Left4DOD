@@ -9,7 +9,7 @@
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, version 3.0, as published by the
  * Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
@@ -28,14 +28,14 @@
  * or <http://www.sourcemod.net/license.php>.
  *
  */
- 
+
 public Action:BroadcastAudioEvent(Handle:event, const String:name[], bool:dontBroadcast)
 {
 	if (GetConVarInt(hL4DOn))
 	{
 		new String:sound[128];
 		GetEventString(event, "sound", sound, sizeof(sound));
-		
+
 		if(strcmp(sound,"Game.USWin", true) == 0)
 		{
 			for (new client = 1; client <= MaxClients; client++)
@@ -45,7 +45,7 @@ public Action:BroadcastAudioEvent(Handle:event, const String:name[], bool:dontBr
 			}
 			return Plugin_Handled;
 		}
-		
+
 		if(strcmp(sound,"Game.GermanWin", true) == 0)
 		{
 			new rum = GetRandomInt(0,3);
@@ -59,7 +59,7 @@ public Action:BroadcastAudioEvent(Handle:event, const String:name[], bool:dontBr
 			}
 			return Plugin_Handled;
 		}
-					
+
 		if(strcmp(sound,"Voice.German_StartRound", true) ==0)
 		{
 			new randint = GetRandomInt(0,13);
@@ -69,8 +69,8 @@ public Action:BroadcastAudioEvent(Handle:event, const String:name[], bool:dontBr
 					EmitSoundToClient(client, g_ZombieIdleSounds[randint]);
 			}
 			return Plugin_Handled;
-		}		
-		
+		}
+
 		if(strcmp(sound,"Voice.German_FlagCapture", true) ==0)
 		{
 			new randint = GetRandomInt(0,13);
@@ -94,9 +94,9 @@ public Action:Ambient(Handle:timer, any:data)
 		hAmbientTimer = INVALID_HANDLE;
 		return Plugin_Stop;
 	}
-	
+
 	EmitSoundToAll("ambient/left4dod.mp3", SOUND_FROM_PLAYER, _, _, _, 0.5);
-			
+
 	return Plugin_Handled;
 }
 
@@ -107,9 +107,9 @@ public Action:ZombieSounds(Handle:timer, any:client)
 		hZombieSoundsTimer = INVALID_HANDLE;
 		return Plugin_Stop;
 	}
-		
+
 	new bot = SelectBot(1);
-	
+
 	if (bot > 0 && IsClientInGame(bot) && GetClientTeam(bot) == AXIS)
 	{
 		if (IsPlayerAlive(bot))
@@ -126,7 +126,7 @@ public Action:ZombieSounds(Handle:timer, any:client)
 			}
 		}
 	}
-	
+
 	return Plugin_Handled;
 }
 
@@ -135,7 +135,7 @@ PlaySound(any:bot, bool:isEntity)
 	if (!isEntity)
 	{
 		if (bot > 0 && IsClientInGame(bot) && IsPlayerAlive(bot))
-		{		
+		{
 			if (GetClientTeam(bot) == 3)
 			{
 				if (g_ZombieType[bot] == 0)
@@ -160,10 +160,10 @@ PlaySound(any:bot, bool:isEntity)
 }
 
 public Action:NormalSoundHook(clients[64], &client_count, String:sample[PLATFORM_MAX_PATH], &entity, &channel, &Float:volume, &level, &pitch, &flags)
-{		
+{
 	if(strcmp(FIRE_SMALL_LOOP2, sample, false) == 0)
 		return Plugin_Stop;
-						
+
 	return Plugin_Continue;
 }
 

@@ -9,7 +9,7 @@
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, version 3.0, as published by the
  * Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
@@ -38,7 +38,7 @@ public GetLivePlayers(any:iTeam)
 		if (IsClientInGame(i) && IsPlayerAlive(i) && GetClientTeam(i) == iTeam)
 			iCount++;
 	}
-	
+
 	return iCount;
 }
 
@@ -50,14 +50,14 @@ GetAlliedTeamNumber()
 GetAxisTeamNumber()
 {
 	new humanstotal = 0;
-	
+
 	for (new i = 1; i <= MaxClients; i++)
 	{
 		if (IsClientInGame(i) && GetClientTeam(i) == AXIS)
 		{
 			if (GetUserFlagBits(i) & ADMFLAG_ROOT || GetUserFlagBits(i) & ADMFLAG_BAN)
 				continue;
-				
+
 			if (!IsFakeClient(i))
 				humanstotal++;
 		}
@@ -68,7 +68,7 @@ GetAxisTeamNumber()
 stock GetAxisBotNumber()
 {
 	new botstotal = 0;
-	
+
 	for (new i = 1; i <= MaxClients; i++)
 	{
 		if (IsClientInGame(i) && GetClientTeam(i) == 3)
@@ -83,7 +83,7 @@ stock GetAxisBotNumber()
 GetHumansNumber()
 {
 	new humanstotal = 0;
-	
+
 	for (new i = 1; i <= MaxClients; i++)
 	{
 		if (IsClientInGame(i))
@@ -98,7 +98,7 @@ GetHumansNumber()
 GetHumansNumberOnTeams()
 {
 	new humanstotal = 0;
-	
+
 	for (new i = 1; i <= MaxClients; i++)
 	{
 		if (IsClientInGame(i))
@@ -113,7 +113,7 @@ GetHumansNumberOnTeams()
 GetHumansConnected()
 {
 	new humanstotal = 0;
-	
+
 	for (new i = 1; i <= MaxClients; i++)
 	{
 		if (IsClientConnected(i))
@@ -132,7 +132,7 @@ CheckLocationNearAlliedSpawn(Float:Loc[3], Float:distance)
 		if (GetVectorDistance(Loc, g_fAlliedSpawnVectors[i]) < distance)
 			return true;
 	}
-	
+
 	return false;
 }
 
@@ -143,7 +143,7 @@ CheckLocationNearAxisSpawn(Float:Loc[3], Float:distance)
 		if (GetVectorDistance(Loc, g_fAxisSpawnVectors[i]) < distance)
 			return true;
 	}
-	
+
 	return false;
 }
 
@@ -157,7 +157,7 @@ public Float:GetDistanceToAxisSpawn(Float:Loc[3])
 		if (distance < bestDistance)
 			bestDistance = distance;
 	}
-	
+
 	return bestDistance;
 }
 
@@ -165,26 +165,26 @@ public bool:GetAlliesNearby(any:client, Float:distance)
 {
 	new bool:isVisible = false;
 	new Float:ClientVector[3], Float:PlayerVector[3];
-	
+
 	if (GetConVarInt(hL4DOn))
-	{		
+	{
 		for (new i=1; i <= MaxClients; i++)
 		{
 			if (IsClientInGame(i) && GetClientTeam(i) == 2 && IsPlayerAlive(i))
 			{
 				if (i == client)
 					continue;
-					
+
 				GetClientEyePosition(client, ClientVector);
 				GetClientEyePosition(i, PlayerVector);
-				
+
 				if (GetVectorDistance(ClientVector, PlayerVector) < distance)
 				{
 					if (IsPointVisible(ClientVector, PlayerVector))
 						isVisible = true;
 				}
 			}
-		}	
+		}
 	}
 	return isVisible;
 }
@@ -192,20 +192,20 @@ public bool:GetAlliesNearby(any:client, Float:distance)
 public bool:GetAlliesNearFlag(Float:vecFlag[3], Float:distance)
 {
 	new Float:PlayerVector[3];
-		
+
 	for (new i=1; i <= MaxClients; i++)
 	{
 		if (IsClientInGame(i) && GetClientTeam(i) == ALLIES && IsPlayerAlive(i))
 		{
 			GetClientAbsOrigin(i, PlayerVector);
-			
+
 			if (GetVectorDistance(vecFlag, PlayerVector) < distance)
 			{
 				return true;
 			}
 		}
-	}	
-	
+	}
+
 	return false;
 }
 
@@ -214,29 +214,29 @@ public bool:GetAlliesNearFlag(Float:vecFlag[3], Float:distance)
 // 2 ignore ALLIES
 // 3 ignore AXIS
 public GetClosestClient(Float:pos[3], ignore)
-{	
+{
 	new Float:ClientVector[3], Float:fDistance, Float:fNearest = DROP_RANGE;
 	new closest = 0;
-	
+
 	for (new i=1; i <= MaxClients; i++)
 	{
 		if (IsClientInGame(i) && IsPlayerAlive(i))
-		{			
+		{
 			if (ignore == 3 && GetClientTeam(i) == AXIS)
 				continue;
-				
+
 			if (ignore == 1 && IsFakeClient(i))
 				continue;
-				
+
 			GetClientAbsOrigin(i, ClientVector);
-			
+
 			fDistance = GetVectorDistance(ClientVector, pos);
 			if (fDistance < fNearest)
 			{
 				fNearest = fDistance;
 				closest = i;
 			}
-		}	
+		}
 	}
 	return closest;
 }
@@ -246,7 +246,7 @@ SelectBot(any:method)
 {
 	new index=0;
 	new client[MAXPLAYERS+1];
-	
+
 	for (new i=1; i <= MaxClients; i++)
 	{
 		if (IsClientInGame(i) && IsPlayerAlive(i) && GetClientTeam(i) == 3)
@@ -258,21 +258,21 @@ SelectBot(any:method)
 				index++;
 				g_bCanMakeNoise[i] = false;
 				CreateTimer(3.0, AllowMakeNoise, i, TIMER_FLAG_NO_MAPCHANGE);
-			} 
-			
+			}
+
 			// Selects ALL bots except SI
 			else if (method == 0)
 			{
 				if (IsFakeClient(i))
 				{
-					if (g_ZombieType[i] == 0 || g_ZombieType[i] == 1 
-					|| g_ZombieType[i] == 2 || g_ZombieType[i] == 3 
+					if (g_ZombieType[i] == 0 || g_ZombieType[i] == 1
+					|| g_ZombieType[i] == 2 || g_ZombieType[i] == 3
 					|| g_ZombieType[i] == 5 || g_ZombieType[i] == 6 || g_ZombieType[i] == 8 || g_ZombieType[i] == 9)
 						continue;
-						
+
 					if (g_ZombieType[i] == EMO && g_AlliedWins <= g_AxisWins)
 						continue;
-						
+
 					else
 					{
 						if (g_iBotsStuck[i] > 400)
@@ -280,7 +280,7 @@ SelectBot(any:method)
 							g_iBotsStuck[i] = 0;
 							return i;
 						}
-						
+
 						client[index] = i;
 						index++;
 					}
@@ -297,7 +297,7 @@ SelectBot(any:method)
 			}
 		}
 	}
-	
+
 	if (index >=1)
 	{
 		new randomnumber = GetRandomInt(0, index-1);
@@ -312,15 +312,15 @@ public bool:TraceEntityFilterAll (entity, contentsMask)
   return false;
 }
 
-public bool:TraceRayDontHitSelf(entity, mask, any:client) 
-{     
-	return (entity != client); 
+public bool:TraceRayDontHitSelf(entity, mask, any:client)
+{
+	return (entity != client);
 }
 
 public bool:TraceEntityFilterPlayer(entity, contentsMask)
 {
 	return entity > MaxClients || !entity;
-} 
+}
 
 public bool:TraceRayFilterWorld(entity, mask, any:client)
 {

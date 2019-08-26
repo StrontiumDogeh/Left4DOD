@@ -14,7 +14,7 @@ HurtOverlay(victim)
 			else if (rnd == 3)
 				ClientCommand(victim, "r_screenoverlay effects/mh_blood1");
 		}
-	}	
+	}
 }
 
 public Action:DeathOverlay(Handle:Timer, any:client)
@@ -29,7 +29,7 @@ public Action:RemoveOverlay(Handle:Timer, any:client)
 	if (IsClientInGame(client))
 	{
 		ClientCommand(client, "r_screenoverlay 0");
-		
+
 		new Handle:message = StartMessageOne("Fade", client);
 		BfWriteShort(message, 266);
 		BfWriteShort(message, 2255);

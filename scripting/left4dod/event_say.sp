@@ -9,7 +9,7 @@
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, version 3.0, as published by the
  * Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
@@ -28,7 +28,7 @@
  * or <http://www.sourcemod.net/license.php>.
  *
  */
- 
+
 public PlayerSayEvent(Handle:event, const String:name[], bool:dontBroadcast)
 {
 	new String:text[200];
@@ -40,16 +40,16 @@ public PlayerSayEvent(Handle:event, const String:name[], bool:dontBroadcast)
 		new String:port[8], String:ip[32];
 		GetConVarString(FindConVar("hostport"), port, sizeof(port));
 		GetConVarString(FindConVar("ip"), ip, sizeof(ip));
-		
+
 		PrintToChatAll("IP: %s:%s", ip, port);
 	}
-	
+
 	if (StrEqual(text, "!motd") || StrEqual(text, "motd"))
 	{
 		if (client > 0)
 			ShowMOTDPanel(client, "MOTD", "https://www.theville.org/game/left4dod.html", MOTDPANEL_TYPE_URL );
 	}
-	
+
 	if (StrContains(text, "error", false) != -1)
 	{
 		if (client > 0)

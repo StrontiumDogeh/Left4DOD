@@ -9,7 +9,7 @@
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, version 3.0, as published by the
  * Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
@@ -34,11 +34,11 @@ public RoundWinEvent(Handle:event, const String:name[], bool:dontBroadcast)
 	#if DEBUG
 		LogToFileEx(g_szLogFileName,"[L4DOD] Round over");
 	#endif
-		
+
 	g_bRoundActive = false;
 	g_bRoundOver = true;
 	g_inProgress = false;
-	
+
 	new team = GetEventInt(event, "team");
 	if (g_Allies >= 1)
 	{
@@ -53,7 +53,7 @@ public RoundWinEvent(Handle:event, const String:name[], bool:dontBroadcast)
 			g_AxisWins++;
 		}
 	}
-				
+
 	#if DEBUG
 		LogToFileEx(g_szLogFileName,"[L4DOD] Unhooking flags");
 	#endif
@@ -67,17 +67,17 @@ public RoundWinEvent(Handle:event, const String:name[], bool:dontBroadcast)
 				new String:classname[128];
 				GetEdictClassname(i, classname, sizeof(classname));
 				if (StrEqual(classname, "dod_capture_area", false))
-				{	
+				{
 					SDKUnhook(i, SDKHook_StartTouch, OnFlagTouched);
 				}
 			}
 		}
 	}
-	
+
 	CloseTimers();
-	
+
 	DisplayScores();
-	
+
 	//Reset who is a bot
 	for (new kk=1; kk<=MaxClients; kk++)
 	{
@@ -91,9 +91,9 @@ public GameOverEvent(Handle:event, const String:name[], bool:dontBroadcast)
 	#if DEBUG
 		LogToFileEx(g_szLogFileName,"[L4DOD] Game over");
 	#endif
-		
+
 	DisplayScores();
-	
+
 	if (GetConVarInt(hL4DGameType) == 0 || GetConVarInt(hL4DGameType) == 2)
 	{
 		for (new i = MaxClients; i < GetMaxEntities(); i++)
@@ -103,42 +103,42 @@ public GameOverEvent(Handle:event, const String:name[], bool:dontBroadcast)
 				new String:classname[128];
 				GetEdictClassname(i, classname, sizeof(classname));
 				if (StrEqual(classname, "dod_capture_area", false))
-				{	
+				{
 					SDKUnhook(i, SDKHook_StartTouch, OnFlagTouched);
 				}
 			}
 		}
 	}
-	
+
 	CloseTimers();
-	
+
 	new rum = GetRandomInt(0,2);
 	EmitSoundToAll(g_EndSounds[rum]);
-		
+
 	for (new i=1; i<=MaxClients; i++)
-	{						
+	{
 		if (hFireTimer[i] != INVALID_HANDLE)
 		{
 			if (CloseHandle(hFireTimer[i]))
 				hFireTimer[i] = INVALID_HANDLE;
 		}
-		
+
 		if (hShieldTimer[i] != INVALID_HANDLE)
 		{
 			if (CloseHandle(hShieldTimer[i]))
 				hShieldTimer[i] = INVALID_HANDLE;
-				
+
 			g_ShieldDeployed[i] = false;
 		}
 	}
-	
-	
+
+
 	// Not at map end since everyone is disconnected by then
 	new humans = GetHumansNumber();
 	if (humans > 0)
 	{
 		new total_drops = g_AmmoBoxNumber + g_HealthPackNumber + g_ZombieBloodNumber + g_PillsNumber + g_HoochNumber + g_AdrenalineNumber + g_BoxNadesNumber + g_AntiGasNumber + g_ShieldNumber + g_SpringNumber;
-		
+
 		LogToFileEx(g_szLogFileName,"======= Map %s ended ====================", g_szMapName);
 		LogToFileEx(g_szLogFileName,"Allied Wins: %i", g_AlliedWins);
 		LogToFileEx(g_szLogFileName,"Axis Wins  : %i", g_AxisWins);
@@ -147,17 +147,17 @@ public GameOverEvent(Handle:event, const String:name[], bool:dontBroadcast)
 		LogToFileEx(g_szLogFileName,"Total drops: %i", total_drops);
 		LogToFileEx(g_szLogFileName,"===============================================");
 		LogToFileEx(g_szLogFileName, " ");
-		
+
 		//Get server ID
 		new String:address[64], ip, String:port[16], String:ServerIp[16];
 		ip = GetConVarInt(FindConVar("hostip"));
 		Format(ServerIp, sizeof(ServerIp), "%i.%i.%i.%i", (ip >> 24) & 0x000000FF,(ip >> 16) & 0x000000FF,(ip >> 8) & 0x000000FF, ip & 0x000000FF);
 		GetConVarString(FindConVar("hostport"), port, sizeof(port));
 		Format(address, sizeof(address), "%s:%s", ServerIp, port);
-		
+
 		new String:query[1024];
 		Format(query, sizeof(query), "INSERT INTO game (mapname, alliedwins, axiswins, gametype, server, players) VALUES('%s', '%i', '%i', '%i', '%s', '%i');", g_szMapName, g_AlliedWins, g_AxisWins, GetConVarInt(hL4DGameType), address, humans);
-			
+
 		//PrintToServer("Query: %s", query);
 		SQL_TQuery(hDatabase, AddToDatabase, query, _, DBPrio_High);
 	}
@@ -168,14 +168,14 @@ DisplayScores()
 	#if DEBUG
 		LogToFileEx(g_szLogFileName,"[L4DOD] Displaying scores");
 	#endif
-	
+
 	new bestWitch = 0, bestEmo = 0, bestTank = 0, bestGasMan = 0, bestZombies = 0, bestTraitor = 0, bestHuman = 0, bestAnarchist = 0, bestUNG = 0, bestWraith=0, bestSkeleton = 0, bestHellSpawn=0;
 	new bestWitchValue = 0, bestEmoValue = 0, bestTankValue = 0, bestGasManValue = 0, bestZombiesValue = 0, bestTraitorValue = 0, bestHumanValue = 0, bestAnarchistValue = 0, bestUNGValue = 0, bestWraithValue = 0, bestSkeletonValue = 0, bestHellSpawnValue=0;
 	for (new i = 1; i<= MaxClients; i++)
 	{
 		if (!IsClientInGame(i) || IsFakeClient(i))
 			continue;
-				
+
 		if (g_ScoreWitch[i] > bestWitchValue)
 		{
 			bestWitchValue = g_ScoreWitch[i];
@@ -237,7 +237,7 @@ DisplayScores()
 			bestHellSpawn = i;
 		}
 	}
-	
+
 	new String:text[400], String:playername[16];
 	Format(text, 400, "");
 
@@ -249,7 +249,7 @@ DisplayScores()
 		if (IsClientInGame(bestWitch))
 			PrintToChat(bestWitch, "[L4DOD] Cash Bonus for Top Witch Killer");
 	}
-		
+
 	Format(playername, 16, "%N", bestEmo);
 	if (bestEmoValue > 0)
 	{
@@ -258,7 +258,7 @@ DisplayScores()
 		if (IsClientInGame(bestEmo))
 			PrintToChat(bestEmo, "[L4DOD] Cash Bonus for Top Emo Killer");
 	}
-		
+
 	Format(playername, 16, "%N", bestTank);
 	if (bestTankValue > 0)
 	{
@@ -267,7 +267,7 @@ DisplayScores()
 		if (IsClientInGame(bestTank))
 			PrintToChat(bestTank, "[L4DOD] Cash Bonus for Top Grey Dude Killer");
 	}
-		
+
 	Format(playername, 16, "%N", bestGasMan);
 	if (bestGasManValue > 0)
 	{
@@ -276,7 +276,7 @@ DisplayScores()
 		if (IsClientInGame(bestGasMan))
 			PrintToChat(bestGasMan, "[L4DOD] Cash Bonus for Top Gas Man Killer");
 	}
-		
+
 	Format(playername, 16, "%N", bestTraitor);
 	if (bestTraitorValue > 0)
 	{
@@ -285,7 +285,7 @@ DisplayScores()
 		if (IsClientInGame(bestTraitor))
 			PrintToChat(bestTraitor, "[L4DOD] Cash Bonus for Top Infected One Killer");
 	}
-		
+
 	Format(playername, 16, "%N", bestAnarchist);
 	if (bestAnarchistValue > 0)
 	{
@@ -294,7 +294,7 @@ DisplayScores()
 		if (IsClientInGame(bestAnarchist))
 			PrintToChat(bestAnarchist, "[L4DOD] Cash Bonus for Top Anarchist Killer");
 	}
-		
+
 	Format(playername, 16, "%N", bestUNG);
 	if (bestUNGValue > 0)
 	{
@@ -303,7 +303,7 @@ DisplayScores()
 		if (IsClientInGame(bestUNG))
 			PrintToChat(bestUNG, "[L4DOD] Cash Bonus for Top UNG Killer");
 	}
-		
+
 	Format(playername, 16, "%N", bestWraith);
 	if (bestWraithValue > 0)
 	{
@@ -312,7 +312,7 @@ DisplayScores()
 		if (IsClientInGame(bestWraith))
 			PrintToChat(bestWraith, "[L4DOD] Cash Bonus for Top Wraith Killer");
 	}
-		
+
 	Format(playername, 16, "%N", bestSkeleton);
 	if (bestSkeletonValue > 0)
 	{
@@ -321,7 +321,7 @@ DisplayScores()
 		if (IsClientInGame(bestSkeleton))
 			PrintToChat(bestSkeleton, "[L4DOD] Cash Bonus for Top Skeleton Killer");
 	}
-	
+
 	Format(playername, 16, "%N", bestHellSpawn);
 	if (bestHellSpawnValue > 0)
 	{
@@ -330,7 +330,7 @@ DisplayScores()
 		if (IsClientInGame(bestHellSpawn))
 			PrintToChat(bestHellSpawn, "[L4DOD] Cash Bonus for Top Hell Spawn Killer");
 	}
-	
+
 	Format(playername, 16, "%N", bestZombies);
 	if (bestZombiesValue > 0)
 	{
@@ -339,7 +339,7 @@ DisplayScores()
 		if (IsClientInGame(bestZombies))
 			PrintToChat(bestZombies, "[L4DOD] Cash Bonus for Top Zombie Killer");
 	}
-		
+
 	Format(playername, 16, "%N", bestHuman);
 	if (bestHumanValue > 0)
 	{
@@ -348,12 +348,12 @@ DisplayScores()
 		if (IsClientInGame(bestHuman))
 			PrintToChat(bestHuman, "[L4DOD] Cash Bonus for Top Human Killer");
 	}
-	
-	
+
+
 	Unescape(text);
-		
+
 	ReplaceString(text, 400, "\\n", "\n");
-	
+
 	new Handle:mSayPanel = CreatePanel();
 	SetPanelTitle(mSayPanel, "========== TOP SCORERS =========");
 	DrawPanelItem(mSayPanel, "", ITEMDRAW_SPACER);
@@ -379,11 +379,11 @@ CloseTimers()
 	#if DEBUG
 		LogToFileEx(g_szLogFileName,"[L4DOD] Closing Timers");
 	#endif
-		
+
 	g_bRoundOver = true;
-	
+
 	g_bRoundActive = false;
-	
+
 	for (new i=1; i<=MaxClients; i++)
 	{
 		if (g_hSearch_Timer[i] != INVALID_HANDLE)
@@ -391,13 +391,13 @@ CloseTimers()
 			KillTimer(g_hSearch_Timer[i]);
 			g_hSearch_Timer[i] = INVALID_HANDLE;
 		}
-		
+
 		if (hFireTimer[i] != INVALID_HANDLE)
 		{
 			KillTimer(hFireTimer[i]);
 			hFireTimer[i] = INVALID_HANDLE;
 		}
-		
+
 		if (hShieldTimer[i] != INVALID_HANDLE)
 		{
 			KillTimer(hShieldTimer[i]);
@@ -405,83 +405,83 @@ CloseTimers()
 			g_ShieldDeployed[i] = false;
 		}
 	}
-	
+
 	if (hAmbientTimer != INVALID_HANDLE)
 	{
 		#if DEBUG
 				LogToFileEx(g_szLogFileName,"[L4DOD] Ended Ambient Timer");
 		#endif
-		
+
 		KillTimer(hAmbientTimer);
 		hAmbientTimer = INVALID_HANDLE;
 	}
-	
+
 	if (hSpawnCheckTimer != INVALID_HANDLE)
 	{
 		#if DEBUG
 				LogToFileEx(g_szLogFileName,"[L4DOD] Ended SpawnCheck Timer");
 		#endif
-		
+
 		KillTimer(hSpawnCheckTimer);
 		hSpawnCheckTimer = INVALID_HANDLE;
 	}
-	
+
 	if (hZombieSoundsTimer != INVALID_HANDLE)
 	{
 		#if DEBUG
 				LogToFileEx(g_szLogFileName,"[L4DOD] Ended Sounds Timer");
 		#endif
-		
+
 		KillTimer(hZombieSoundsTimer);
 		hZombieSoundsTimer = INVALID_HANDLE;
 	}
-	
+
 	if (hTeamCheck != INVALID_HANDLE)
 	{
 		#if DEBUG
 				LogToFileEx(g_szLogFileName,"[L4DOD] Ended TeamCheck Timer");
 		#endif
-		
+
 		KillTimer(hTeamCheck);
 		hTeamCheck = INVALID_HANDLE;
 	}
-		
+
 	if (hOneSecond != INVALID_HANDLE)
 	{
 		#if DEBUG
 				LogToFileEx(g_szLogFileName,"[L4DOD] Ended Effects Timer");
 		#endif
-		
+
 		KillTimer(hOneSecond);
 		hOneSecond = INVALID_HANDLE;
 	}
-	
+
 	if (hTenSecond != INVALID_HANDLE)
 	{
 		#if DEBUG
 				LogToFileEx(g_szLogFileName,"[L4DOD] Ended 10 sec Timer");
 		#endif
-		
+
 		KillTimer(hTenSecond);
 		hTenSecond = INVALID_HANDLE;
 	}
-	
+
 	if (hTenthSecond != INVALID_HANDLE)
 	{
 		#if DEBUG
 				LogToFileEx(g_szLogFileName,"[L4DOD] Ended TenthSecond Timer");
 		#endif
-		
+
 		KillTimer(hTenthSecond);
 		hTenthSecond = INVALID_HANDLE;
 	}
-	
+
 	if (hFlagTimer != INVALID_HANDLE)
 	{
 		#if DEBUG
 				LogToFileEx(g_szLogFileName,"[L4DOD] Ended Flag Control Timer");
 		#endif
-		
+
 		KillTimer(hFlagTimer);
 		hFlagTimer = INVALID_HANDLE;
 	}

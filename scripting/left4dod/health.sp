@@ -9,7 +9,7 @@
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, version 3.0, as published by the
  * Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
@@ -28,18 +28,18 @@
  * or <http://www.sourcemod.net/license.php>.
  *
  */
- 
+
  public Action:RestoreHealth(Handle:timer, any:client)
 {
 	//Set Health to current health level
 	if (IsClientInGame(client) && IsPlayerAlive(client))
 	{
-		SetEntProp(client, Prop_Data, "m_takedamage", 2, 1); 
-		
+		SetEntProp(client, Prop_Data, "m_takedamage", 2, 1);
+
 		if (!IsFakeClient(client))
 			PrintHelp(client, "*Spawn protection DISABLED", 1);
 	}
-		
+
 	return Plugin_Handled;
 }
 
@@ -47,9 +47,9 @@ public Action:RestoreHealthFromZombieBlood(Handle:timer, any:client)
 {
 	if (IsClientInGame(client) && IsPlayerAlive(client))
 	{
-		SetEntProp(client, Prop_Data, "m_takedamage", 2, 1); 
+		SetEntProp(client, Prop_Data, "m_takedamage", 2, 1);
 	}
-		
+
 	return Plugin_Handled;
 }
 
@@ -58,15 +58,15 @@ Suck(client, target, dmg)
 	if (IsClientInGame(client) && IsPlayerAlive(client) && g_canSuck[client])
 	{
 		g_canSuck[client] = false;
-		
+
 		if (dmg <= 2)
 			dmg = 2;
-							
+
 		CreateTimer(0.3, AllowMoreSucking, client, TIMER_FLAG_NO_MAPCHANGE);
-		
-		SetEntProp(target, Prop_Data, "m_takedamage", 2, 1); 
-						
-		new Handle:pack;			
+
+		SetEntProp(target, Prop_Data, "m_takedamage", 2, 1);
+
+		new Handle:pack;
 		CreateDataTimer(0.1, DealDamage, pack, TIMER_FLAG_NO_MAPCHANGE);
 		WritePackCell(pack, target);
 		WritePackCell(pack, client);
@@ -81,9 +81,9 @@ Heal(client, target, heal)
 	if (IsClientInGame(client) && IsPlayerAlive(client) && g_canSuck[client])
 	{
 		g_canSuck[client] = false;
-							
+
 		CreateTimer(0.2, AllowMoreSucking, client, TIMER_FLAG_NO_MAPCHANGE);
-		
+
 		if (g_Health[target] < g_HealthMax[target])
 		{
 			g_Health[target] += heal;
@@ -95,7 +95,7 @@ Heal(client, target, heal)
 public Action:AllowMoreSucking(Handle:timer, any:client)
 {
 	g_canSuck[client] = true;
-		
+
 	return Plugin_Continue;
 }
 

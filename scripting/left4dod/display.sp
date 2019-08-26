@@ -9,7 +9,7 @@
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, version 3.0, as published by the
  * Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
@@ -28,8 +28,8 @@
  * or <http://www.sourcemod.net/license.php>.
  *
  */
- 
- 
+
+
 // ON SCREEN DISPLAY ####################################################################
 /// MMX's amazing routine to escape characters to print LF etc
 stock Unescape(String:buffer[])
@@ -38,7 +38,7 @@ stock Unescape(String:buffer[])
 	outPos    = 0,
 	count     = 0,
 	bufferlen = strlen(buffer);
-	
+
 	for (; inPos < bufferlen; inPos++, outPos++)
 	{
 		// non escape char found
@@ -163,9 +163,9 @@ PrintHelp(any:client, String:text[], any:type=0)
 			KvSetColor(kv, "color", 255, 255, 0, 255);
 			KvSetNum(kv, "level", 1);
 			KvSetNum(kv, "time", 10);
-			
+
 			CreateDialog(client, kv, DialogType_Msg);
-			
+
 			CloseHandle(kv);
 		}
 		else if (type == 3)
@@ -176,7 +176,7 @@ PrintHelp(any:client, String:text[], any:type=0)
 public Action:RandomHelp(Handle:Timer, any:client)
 {
 	if (IsClientInGame(client) && g_Hints[client])
-	{		
+	{
 		new randomnumber = GetRandomInt(0, 5);
 		switch (randomnumber)
 		{
@@ -185,37 +185,37 @@ public Action:RandomHelp(Handle:Timer, any:client)
 
 			case 1:
 				PrintHelp(client, "*[HINT] Say \x04!menu\x01 for the Menu", 0);
-			
+
 			case 2:
 				PrintHelp(client, "*[HINT] Say \x04!faq\x01 for help", 0);
-				
+
 			case 3:
 				PrintHelp(client, "*DoDS:Left4DoD Mod written by Dog", 2);
-				
+
 			case 4:
 				PrintHelp(client, "*DoDS:Left4DoD Mod written by Dog", 2);
-				
+
 			case 5:
 				PrintHelp(client, "*Got problems with L4DoD? Go to www.theville.org", 2);
 		}
-		
+
 		if (GetClientTeam(client) == AXIS)
 		{
 			if (g_ZombieType[client] == 0)
 				PrintHelp(client, "*[HINT] \x04Right click\x01 to make the witch teleport", 0);
-				
+
 			else if (g_ZombieType[client] == 2)
 				PrintHelp(client, "*[HINT] \x04Right click\x01 to make the Gasman release his gas", 0);
-				
+
 			else if (g_ZombieType[client] == 3)
 				PrintHelp(client, "*[HINT] \x04Right click\x01 to make the Infected One disappear", 0);
-				
+
 			else if (g_ZombieType[client] == 4)
 				PrintHelp(client, "*[HINT] \x04Right click\x01 to make the Emo suicide", 0);
-			
+
 			else if (g_ZombieType[client] == 1)
 				PrintHelp(client, "*[HINT] \x04Right click\x01 to teleport reinforcements", 0);
-			
+
 			else if (g_ZombieType[client] == 5)
 				PrintHelp(client, "*[HINT] \x04Right click\x01 to launch exploding flaming skulls", 0);
 		}
@@ -226,34 +226,34 @@ public Action:RandomHelp(Handle:Timer, any:client)
 			{
 				case 0:
 					PrintHelp(client, "*[HINT] \x04Zombie Blood\x01 makes you invisible to Zombies", 0);
-					
+
 				case 1:
 					PrintHelp(client, "*[HINT] Say \x04!drophealth\x01 to give a team mate health", 0);
-				
+
 				case 2:
 					PrintHelp(client, "*[HINT] Pick up \x04RED\x01 health boxes if you need healing", 0);
-					
+
 				case 3:
 					PrintHelp(client, "*[HINT] Pick up \x04GREEN\x01 ammo boxes for ammo", 0);
-				
+
 				case 4:
 					PrintHelp(client, "*[HINT] Pick up \x04pill bottles\x01 for extra health", 0);
-					
+
 				case 5:
 					PrintHelp(client, "*[HINT] Say \x04!menu\x01 at spawn for German weapons", 0);
-				
+
 				case 6:
 					PrintHelp(client, "*[HINT] Smoke grenades are \x04Molotovs\x01", 0);
-					
+
 				case 7:
 					PrintHelp(client, "*[HINT] \x04Hooch\x01 will make you sprint faster!", 0);
-					
+
 				case 8:
 					PrintHelp(client, "*[HINT] Pick up \x04BROWN\x01 ammo boxes for ammo", 0);
-				
+
 				case 9:
 					PrintHelp(client, "*[HINT] Pick up \x04orange pill bottles\x01 for AntiGas", 0);
-				
+
 				case 10:
 					PrintHelp(client, "*[HINT] Press the USE key to use your TNT", 0);
 			}

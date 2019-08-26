@@ -9,7 +9,7 @@
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, version 3.0, as published by the
  * Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
@@ -34,18 +34,18 @@
 Detonate(any:client)
 {
 	if (IsClientInGame(client))
-	{ 
+	{
 		new Float:ClientOrigin[3];
 		GetClientAbsOrigin(client, ClientOrigin);
 		ClientOrigin[2] +=50;
-		
+
 		new String:szMag[16];
 		Format(szMag, sizeof(szMag), "%i", EMODMG1);
-		
+
 		#if DEBUG
 			LogToFileEx(g_szLogFileName,"[L4DOD] Emo detonated:%i", client);
 		#endif
-				
+
 		new ent = CreateEntityByName("env_explosion");
 		DispatchKeyValue(ent, "iMagnitude", szMag);
 		DispatchKeyValue(ent, "iRadiusOverride", szMag);
@@ -54,7 +54,7 @@ Detonate(any:client)
 		TeleportEntity(ent, ClientOrigin, NULL_VECTOR, NULL_VECTOR);
 		AcceptEntityInput(ent, "Explode");
 		AcceptEntityInput(ent, "Kill");
-		
+
 		new push = CreateEntityByName("env_physexplosion");
 		DispatchKeyValue(push, "Magnitude", szMag);
 		DispatchKeyValue(push, "Spawnflags", "27");
@@ -62,12 +62,12 @@ Detonate(any:client)
 		TeleportEntity(push, ClientOrigin, NULL_VECTOR, NULL_VECTOR);
 		AcceptEntityInput(push, "Explode");
 		AcceptEntityInput(push, "Kill");
-		
+
 		AddParticle(client, "smokegrenade", 2.0, 10.0);
-		
+
 		new Float:fMag = float(StringToInt(szMag));
 		if (fMag <= 200.0) fMag = 200.0;
-		
+
 		new shake = CreateEntityByName("env_shake");
 		DispatchKeyValueFloat(shake, "amplitude", fMag);
 		DispatchKeyValueFloat(shake, "radius", fMag * 2);
@@ -78,17 +78,17 @@ Detonate(any:client)
 		AcceptEntityInput(shake, "StartShake");
 		TeleportEntity(shake, ClientOrigin, NULL_VECTOR, NULL_VECTOR);
 		CreateTimer(1.1, DestroyShake, shake, TIMER_FLAG_NO_MAPCHANGE);
-		
+
 		//Make sure the Emo is dead
 		if (IsPlayerAlive(client))
 			ForcePlayerSuicide(client);
-		
+
 		RemoveRagdoll(client);
 	}
 }
 
 public Action:DestroyShake(Handle:timer, any:entity)
-{		
+{
 	if (IsValidEdict(entity))
 	{
 		new String:classname[256];

@@ -9,7 +9,7 @@
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, version 3.0, as published by the
  * Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
@@ -28,7 +28,7 @@
  * or <http://www.sourcemod.net/license.php>.
  *
  */
- 
+
 // COMMANDS #######################################################################
 public Action:Command_VoiceMenu(client, const String:command[], argc)
 {
@@ -92,11 +92,11 @@ public Action:Command_Kill(client, args)
 	return Plugin_Continue;
 }
 
-public Action:Command_DropHealth(client, args) 
+public Action:Command_DropHealth(client, args)
 {
 	if (client > 0 && IsClientInGame(client) && GetClientTeam(client) == ALLIES)
 	{
-		
+
 		if (g_numDroppedHealth[client] > 0)
 		{
 			CreateTimer(0.1, SpawnHealthBoxInFront, client, TIMER_FLAG_NO_MAPCHANGE);
@@ -107,21 +107,21 @@ public Action:Command_DropHealth(client, args)
 			PrintHelp(client, "*You do not have enough health kits", 0);
 
 	}
-		
+
 	return Plugin_Handled;
 }
 
-public Action:Command_Medic(client, args) 
+public Action:Command_Medic(client, args)
 {
 	if (client > 0 && IsClientInGame(client) && GetClientTeam(client) == ALLIES)
-		PrintHelp(client, "*Pick up the \x04RED boxes\x01 when a Zombie dies", 0);	
+		PrintHelp(client, "*Pick up the \x04RED boxes\x01 when a Zombie dies", 0);
 	return Plugin_Handled;
 }
 
-public Action:Command_Ammo(client, args) 
+public Action:Command_Ammo(client, args)
 {
 	if (client > 0 && IsClientInGame(client) && GetClientTeam(client) == ALLIES)
-		PrintHelp(client, "*Pick up the \x05GREEN boxes\x01 when a Zombie dies", 0);	
+		PrintHelp(client, "*Pick up the \x05GREEN boxes\x01 when a Zombie dies", 0);
 	return Plugin_Handled;
 }
 
@@ -129,14 +129,14 @@ public Action:Command_Help(client, args)
 {
 	if (client > 0)
 		ShowMOTDPanel(client, "Left4DoD Help", "http://www.boff.ca/left4dod/index.html", MOTDPANEL_TYPE_URL );
-		
+
 	return Plugin_Handled;
 }
 
 public Action:Command_Status(client, args)
 {
 	new total_drops = g_AmmoBoxNumber + g_HealthPackNumber + g_ZombieBloodNumber + g_PillsNumber + g_HoochNumber + g_AdrenalineNumber + g_BoxNadesNumber + g_AntiGasNumber +g_RadioNumber + g_ShieldNumber + g_SpringNumber;
-	
+
 	PrintToConsole(client, "");
 	PrintToConsole(client, "======= LEFT4DOD STATUS V%s ======", PLUGIN_VERSION);
 	PrintToConsole(client, "Allied Wins: %i", g_AlliedWins);
@@ -150,7 +150,7 @@ public Action:Command_Status(client, args)
 	PrintToConsole(client, "");
 	PrintToConsole(client, "Allied Flag Status: %s", g_FlagStates[g_AlliedFlagStatus]);
 	PrintToConsole(client, "Axis Flag Status: %s", g_FlagStates[g_AxisFlagStatus]);
-		
+
 	if (GetConVarInt(hL4DGameType) == 0)
 	{
 		PrintToConsole(client, "");
@@ -159,52 +159,52 @@ public Action:Command_Status(client, args)
 		{
 			if (!IsClientInGame(i))
 				continue;
-			
+
 			if (IsFakeClient(i))
 				continue;
-				
+
 			if (g_iSwapped[i] == 0)
 				continue;
-			
+
 			PrintToConsole(client, "%N - Swapped: %i", i, g_iSwapped[i]);
 		}
 	}
-	
+
 	PrintToConsole(client, "");
 	PrintToConsole(client, "======= LEFT4DOD BANK ======");
 	for (new i = 1; i <= MaxClients; i++)
 	{
 		if (!IsClientInGame(i))
 			continue;
-		
+
 		if (IsFakeClient(i))
 			continue;
-		
+
 		if (g_iMoney[i] > 0)
 			PrintToConsole(client, "%N - $%i", i, g_iMoney[i]);
 	}
-	
+
 	PrintToConsole(client, "");
 	PrintToConsole(client, "======= LEFT4DOD GROUP STATUS ======");
 	for (new i = 1; i <= MaxClients; i++)
 	{
 		if (!IsClientInGame(i))
 			continue;
-		
+
 		if (IsFakeClient(i))
 			continue;
-				
+
 		if (g_bIsSupporter[i])
 			PrintToConsole(client, "%N - is a Left4DoD Ville Supporter", i);
-		
+
 		if (g_IsMember[i] == 1)
 			PrintToConsole(client, "%N - is a Left4DoD Ville Steam Group Member", i);
-			
+
 		else if (g_IsMember[i] == 2)
 			PrintToConsole(client, "%N - is a Left4DoD Ville Steam Group Admin", i);
 	}
 
-	
+
 	return Plugin_Handled;
 }
 
@@ -215,10 +215,10 @@ public Action:Command_BotStatus(client, args)
 	{
 		if (!IsClientInGame(i))
 			continue;
-		
+
 		if (!IsFakeClient(i))
 			continue;
-		
+
 		PrintToConsole(client, "%N - Health: %i MaxHealth: %i)", i, g_Health[i], g_HealthMax[i]);
 	}
 	return Plugin_Handled;

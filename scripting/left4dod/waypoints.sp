@@ -9,7 +9,7 @@
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, version 3.0, as published by the
  * Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
@@ -37,19 +37,19 @@ public Action:Command_Location(iClient, args)
 		new Float:vecs[3], Float:angs[3];
 		GetClientAbsOrigin(iClient, vecs);
 		PrintToChat(iClient, "loc %f %f %f", vecs[0], vecs[1], vecs[2]);
-		
+
 		GetClientAbsAngles(iClient, angs);
 		PrintToChat(iClient, "angle %f %f %f", angs[0], angs[1], angs[2]);
-		
+
 		new Float:height;
 		height = DistanceToSky(iClient);
 		PrintToChat(iClient, "Height above head: %f", height);
-		
+
 		new x = -1, Float:vLoc[3], number = 0;
-		while ((x = FindEntityByClassname(x, "dod_control_point")) != -1) 
+		while ((x = FindEntityByClassname(x, "dod_control_point")) != -1)
 		{
 			GetEntDataVector(x, g_oEntityOrigin, vLoc);
-			
+
 			PrintToChat(iClient, "%f %f %f", vLoc[0], vLoc[1], VectorToSky(vLoc));
 			number++;
 		}
@@ -60,18 +60,18 @@ public Action:Command_Location(iClient, args)
 public Action:Command_Waypoint(iClient, args)
 {
 	new String:wp_type[16], String:wp_set[16], String:team[16], Float:location[3];
-		
+
 	if (args < 2)
 	{
 		ReplyToCommand(iClient, "[SM] Usage: sm_waypoint <add> <#>");
 		return Plugin_Handled;
 	}
-	
+
 	GetCmdArg(1, wp_type, sizeof(wp_type));
 	GetCmdArg(2, wp_set, sizeof(wp_set));
 	new setnumber = StringToInt(wp_set);
 	new setteam = GetClientTeam(iClient);
-	
+
 	if (iClient > 0 && GetClientTeam(iClient) > 1)
 	{
 		if (setnumber > 0 && setnumber < 9)
@@ -79,12 +79,12 @@ public Action:Command_Waypoint(iClient, args)
 			if (StrEqual(wp_type, "add"))
 			{
 				GetClientAbsOrigin(iClient, location);
-				
+
 				if (setteam == AXIS)
 				{
 					Format(team, sizeof(team), "axis%i", setnumber);
 					g_iAxisKeys[setnumber] += 1;
-					
+
 					SetMapData(team, g_iAxisKeys[setnumber], location, setnumber, setteam);
 					PrintToChat(iClient, "[SM] Waypoint set [%i]: %i", setnumber, g_iAxisKeys[setnumber]);
 				}
@@ -92,7 +92,7 @@ public Action:Command_Waypoint(iClient, args)
 				{
 					Format(team, sizeof(team), "allies%i", setnumber);
 					g_iAlliesKeys[setnumber] += 1;
-					
+
 					SetMapData(team, g_iAlliesKeys[setnumber], location, setnumber, setteam);
 					PrintToChat(iClient, "[SM] Waypoint set [%i]: %i", setnumber, g_iAlliesKeys[setnumber]);
 				}
@@ -114,7 +114,7 @@ bool:SetMapData(String:team[], any:key, Float:vector[3], any:setnumber, any:iTea
 	BuildPath(Path_SM, datapath, PLATFORM_MAX_PATH, "data/bot_%s.nav", g_szMapName);
 
 	FileToKeyValues(h_KV, datapath);
-	
+
 	if (!KvJumpToKey(h_KV, team, true))
 	{
 		CloseHandle(h_KV);
@@ -125,25 +125,25 @@ bool:SetMapData(String:team[], any:key, Float:vector[3], any:setnumber, any:iTea
 	KvSetVector(h_KV, temp, vector);
 	KvRewind(h_KV);
 	KeyValuesToFile(h_KV, datapath);
-	
-	
+
+
 	if (!KvJumpToKey(h_KV, "data", true))
 	{
 		CloseHandle(h_KV);
 		return false;
 	}
-	
+
 	new String:setkeys[16];
-	
+
 	if (iTeam == 3)
 		Format(setkeys, sizeof(setkeys), "axiskeys%i", setnumber);
 	else if (iTeam == 2)
 		Format(setkeys, sizeof(setkeys), "allieskeys%i", setnumber);
-		
+
 	KvSetNum(h_KV, setkeys, key);
 	KvRewind(h_KV);
 	KeyValuesToFile(h_KV, datapath);
-	
+
 	CloseHandle(h_KV);
 	return true;
 }
@@ -153,11 +153,11 @@ bool:GetMapData()
 	new Handle:h_KV = CreateKeyValues("WayPoints");
 	new String:temp[5];
 	new String:setgroup[16], String:setkeys[16];
-		
+
 	decl String:datapath[PLATFORM_MAX_PATH];
 	BuildPath(Path_SM, datapath, PLATFORM_MAX_PATH, "data/bot_%s.nav", g_szMapName);
 	FileToKeyValues(h_KV, datapath);
-	
+
 	for (new iTeam = 2; iTeam <= 3; iTeam++)
 	{
 		for (new i = 1; i <= 8; i++)
@@ -174,7 +174,7 @@ bool:GetMapData()
 			{
 				Format(setkeys, sizeof(setkeys), "allieskeys%i", i);
 				g_iAlliesKeys[i] = KvGetNum(h_KV, setkeys, 0);
-				
+
 				#if DEBUG
 				LogToFileEx(g_szLogFileName,"[L4DOD] ALLIES SET %i LOADED with %i KEYS", i, g_iAlliesKeys[i]);
 				#endif
@@ -183,27 +183,27 @@ bool:GetMapData()
 			{
 				Format(setkeys, sizeof(setkeys), "axiskeys%i", i);
 				g_iAxisKeys[i] = KvGetNum(h_KV, setkeys, 0);
-				
+
 				#if DEBUG
 				LogToFileEx(g_szLogFileName,"[L4DOD] AXIS SET %i LOADED with %i KEYS", i, g_iAxisKeys[i]);
 				#endif
-			}	
-			
+			}
+
 			KvRewind(h_KV);
-			
+
 			///////////////////////////////////////////////////////////////// Lookup Axis waypoints
 			if (iTeam == ALLIES)
 				Format(setgroup, sizeof(setgroup), "allies%i", i);
 			else if (iTeam == AXIS)
 				Format(setgroup, sizeof(setgroup), "axis%i", i);
-				
+
 			if (!KvJumpToKey(h_KV, setgroup))
 			{
 				CloseHandle(h_KV);
 				LogToFileEx(g_szLogFileName,"[L4DOD] UNABLE TO LOAD NAVIGATION - MISSING WAYPOINTS");
 				return false;
 			}
-			
+
 			if (iTeam == ALLIES)
 			{
 				for (new keyvalue=1; keyvalue <= g_iAlliesKeys[i]; keyvalue++)
@@ -222,24 +222,24 @@ bool:GetMapData()
 			}
 		}
 	}
-	
+
 	///////////////////////////////////////////////////////////////// Lookup creator info
 	KvRewind(h_KV);
-	
+
 	if (KvJumpToKey(h_KV, "creator"))
 	{
 		KvGetString(h_KV, "name", g_szWayPointCreator, 32);
 		KvGetString(h_KV, "date", g_szWayPointDate, 16);
 	}
-			
+
 	CloseHandle(h_KV);
-	
+
 	SetConVarInt(hL4DSetup, 0);
 	SetConVarInt(hL4DOn, 1);
-	
+
 	#if DEBUG
 		LogToFileEx(g_szLogFileName,"[L4DOD] MAP DATA LOADED SUCCESSFULLY");
 	#endif
-	
+
 	return true;
 }

@@ -9,7 +9,7 @@
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, version 3.0, as published by the
  * Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
@@ -32,11 +32,11 @@
 AttachParticle(ent, String:particleType[], Float:time=1.0)
 {
 	new particle = CreateEntityByName("info_particle_system");
-	
+
 	#if DEBUG
 		LogToFileEx(g_szLogFileName,"[L4DOD] Created Particle:%i", particle);
 	#endif
-	
+
 	new String:tName[128];
 	if (IsValidEdict(particle))
 	{
@@ -46,29 +46,29 @@ AttachParticle(ent, String:particleType[], Float:time=1.0)
 		#if DEBUG
 			LogToFileEx(g_szLogFileName,"[L4DOD] Got vectors for Particle:%i", particle);
 		#endif
-		
+
 		TeleportEntity(particle, pos, NULL_VECTOR, NULL_VECTOR);
-		
+
 		#if DEBUG
 			LogToFileEx(g_szLogFileName,"[L4DOD] Teleported Particle:%i", particle);
 		#endif
-		
+
 		Format(tName, sizeof(tName), "target%i", ent);
 		DispatchKeyValue(ent, "targetname", tName);
-		
+
 		DispatchKeyValue(particle, "targetname", "dodparticle");
 		DispatchKeyValue(particle, "effect_name", particleType);
 		DispatchSpawn(particle);
-		
+
 		#if DEBUG
 			LogToFileEx(g_szLogFileName,"[L4DOD] Spawned Particle:%i", particle);
 		#endif
-		
+
 		SetVariantString(tName);
 		AcceptEntityInput(particle, "SetParent", particle, particle, 0);
 		ActivateEntity(particle);
 		AcceptEntityInput(particle, "start");
-		
+
 		CreateTimer(time, DeleteParticle, particle, TIMER_FLAG_NO_MAPCHANGE);
 	}
 }
@@ -76,7 +76,7 @@ AttachParticle(ent, String:particleType[], Float:time=1.0)
 AddParticle(ent, String:type[], Float:time, Float:offset)
 {
 	new particle = CreateEntityByName("info_particle_system");
-	
+
 	new String:tName[128];
 	if (IsValidEdict(particle) && IsValidEntity(ent))
 	{
@@ -84,16 +84,16 @@ AddParticle(ent, String:type[], Float:time, Float:offset)
 		GetEntPropVector(ent, Prop_Send, "m_vecOrigin", pos);
 		pos[2] += offset;
 		TeleportEntity(particle, pos, NULL_VECTOR, NULL_VECTOR);
-		
+
 		Format(tName, sizeof(tName), "target%i", ent);
 		DispatchKeyValue(ent, "targetname", tName);
-		
+
 		DispatchKeyValue(particle, "targetname", "dodparticle");
 		DispatchKeyValue(particle, "effect_name", type);
 		DispatchSpawn(particle);
 		ActivateEntity(particle);
 		AcceptEntityInput(particle, "start");
-		
+
 		if (time != -1.0)
 			CreateTimer(time, DeleteParticle, particle, TIMER_FLAG_NO_MAPCHANGE);
 	}
@@ -107,12 +107,12 @@ PositionParticle(Float:pos[3], String:type[], Float:time)
 	{
 		pos[2] += 10;
 		TeleportEntity(particle, pos, NULL_VECTOR, NULL_VECTOR);
-				
+
 		DispatchKeyValue(particle, "effect_name", type);
 		DispatchSpawn(particle);
 		ActivateEntity(particle);
 		AcceptEntityInput(particle, "start");
-		
+
 		CreateTimer(time, DeleteParticle, particle, TIMER_FLAG_NO_MAPCHANGE);
 	}
 }
@@ -134,7 +134,7 @@ public Action:DeleteParticle(Handle:timer, any:particle)
 AttachFireParticle(ent, String:particleType[], Float:time=1.0)
 {
 	new particle = CreateEntityByName("info_particle_system");
-	
+
 	new String:tName[128];
 	if (IsValidEdict(particle))
 	{
@@ -142,10 +142,10 @@ AttachFireParticle(ent, String:particleType[], Float:time=1.0)
 		GetEntPropVector(ent, Prop_Send, "m_vecOrigin", pos);
 		pos[2] += 10;
 		TeleportEntity(particle, pos, NULL_VECTOR, NULL_VECTOR);
-		
+
 		Format(tName, sizeof(tName), "target%i", ent);
 		DispatchKeyValue(ent, "targetname", tName);
-		
+
 		DispatchKeyValue(particle, "targetname", "dodparticle");
 		DispatchKeyValue(particle, "effect_name", particleType);
 		DispatchSpawn(particle);
@@ -153,9 +153,9 @@ AttachFireParticle(ent, String:particleType[], Float:time=1.0)
 		AcceptEntityInput(particle, "SetParent", particle, particle, 0);
 		ActivateEntity(particle);
 		AcceptEntityInput(particle, "start");
-		
+
 		g_FireParticle[ent] = particle;
-		
+
 		CreateTimer(time, DeleteFireParticle, particle, TIMER_FLAG_NO_MAPCHANGE);
 	}
 }
@@ -170,13 +170,13 @@ public Action:DeleteFireParticle(Handle:timer, any:particle)
 		{
 			AcceptEntityInput(particle, "Kill");
 		}
-		
+
 		for (new i=1; i <= MaxClients; i++)
 		{
 			if (g_FireParticle[i] == particle)
 			{
 				g_FireParticle[i] = 0;
-				
+
 				return Plugin_Handled;
 			}
 		}

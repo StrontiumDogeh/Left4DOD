@@ -9,7 +9,7 @@
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, version 3.0, as published by the
  * Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
@@ -35,7 +35,7 @@ public Action:Timer_UpdateView(Handle:Timer)
 	{
 		if(!IsClientConnected(i) || !IsClientInGame(i) || !IsPlayerAlive(i) )
 			continue;
-	
+
 		GetPlayerEye(i, g_fPosition[i]);
 	}
 	return Plugin_Continue;
@@ -71,7 +71,7 @@ CheckForAFK(client)
 			else
 				bSamePlace[i] = false;
 		}
-		
+
 		if(bSamePlace[0] && bSamePlace[1] && bSamePlace[2])
 		{
 			g_iTimeAFK[client]++;
@@ -93,9 +93,9 @@ HandleAFKClient(client)
 	new iSpecTime;
 	new iKickTime;
 	new iTeam = GetClientTeam(client);
-	
+
 	iKickTime = 36; //6 minutes
-	
+
 	if (IsFakeClient(client))
 	{
 		iSpecTime = 2;
@@ -113,7 +113,7 @@ HandleAFKClient(client)
 	{
 		iSpecTime = 6;
 	}
-	
+
 	if (g_bIsSupporter[client] || g_IsMember[client] == 2)
 	{
 		iSpecTime = 6;
@@ -133,13 +133,13 @@ HandleAFKClient(client)
 			{
 				PrintToChatAll("%N was moved to spectate for being AFK.", client);
 				LogToFileEx(g_szLogFileName, "\"%L\" was moved to spectate for being AFK too long.", client);
-				ChangeClientTeam(client, 1);  
-				
+				ChangeClientTeam(client, 1);
+
 				CreateTimer(1.0, DisplaySpecMenu, client, TIMER_FLAG_NO_MAPCHANGE);
 			}
 		}
 	}
-	
+
 	if (g_iTimeAFK[client] == (iSpecTime) && iTeam < 2)
 	{
 		if (!IsFakeClient(client))
@@ -147,7 +147,7 @@ HandleAFKClient(client)
 			CreateTimer(1.0, DisplaySpecMenu, client, TIMER_FLAG_NO_MAPCHANGE);
 		}
 	}
-	
+
 	if(g_iTimeAFK[client] >= iKickTime)
 	{
 		if (!IsFakeClient(client) && !g_bIsSupporter[client])
@@ -160,7 +160,7 @@ HandleAFKClient(client)
 			}
 		}
 	}
-	
+
 	return;
 }
 
@@ -170,9 +170,9 @@ bool:GetPlayerEye(client, Float:pos[3])
 	new Float:vAngles[3], Float:vOrigin[3];
 	GetClientEyePosition(client,vOrigin);
 	GetClientEyeAngles(client, vAngles);
-	
+
 	new Handle:trace = TR_TraceRayFilterEx(vOrigin, vAngles, MASK_SHOT, RayType_Infinite, TraceEntityFilterPlayer);
-	
+
 	if(TR_DidHit(trace))
 	{
 		TR_GetEndPosition(pos, trace);
@@ -187,27 +187,27 @@ public Action:DisplaySpecMenu(Handle:timer, any:client)
 {
 	if (IsClientInGame(client))
 		SpecMenu(client);
-	
+
 	return Plugin_Handled;
 }
 
 SpecMenu(client)
-{	
+{
 	new Handle:hSpecMenu = CreateMenu(MenuHandler_Spec);
-	
+
 	decl String:title[100];
 	Format(title, sizeof(title), "%s", "Are you spectating?");
 	SetMenuTitle(hSpecMenu, title);
 	SetMenuExitButton(hSpecMenu, true);
-	
+
 	//1
 	AddMenuItem(hSpecMenu, "yes", "Yes");
-	
+
 	//2
 	AddMenuItem(hSpecMenu, "no", "No");
-	
+
 	SetMenuExitButton(hSpecMenu, false);
-	DisplayMenu(hSpecMenu, client, 10);	
+	DisplayMenu(hSpecMenu, client, 10);
 }
 
 public MenuHandler_Spec(Handle:menu, MenuAction:action, client, param2)
@@ -218,9 +218,9 @@ public MenuHandler_Spec(Handle:menu, MenuAction:action, client, param2)
 	}
 	else if (action == MenuAction_Select)
 	{
-		decl String:info[32];		
+		decl String:info[32];
 		GetMenuItem(menu, param2, info, sizeof(info));
-		
+
 		if (StrEqual(info, "yes"))
 		{
 			g_iTimeAFK[client] = 0;

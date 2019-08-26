@@ -9,7 +9,7 @@
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, version 3.0, as published by the
  * Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
@@ -34,18 +34,18 @@
 	if (!IsClientInGame(iClient) || !IsPlayerAlive(iClient) || GetConVarInt(hL4DOn) == 0 || g_bRoundOver)
 	{
 		g_hLocation_Timer[iClient] = INVALID_HANDLE;
-		
+
 		#if DEBUG
 			LogToFileEx(g_szLogFileName,"[BOTS] Stopped Location Timer: %i", iClient);
 		#endif
-		
+
 		return Plugin_Stop;
 	}
 	else
 	{
 		//PerformCheck(iClient);
 	}
-	
+
 	return Plugin_Continue;
 }
 
@@ -54,8 +54,8 @@ PerformCheck(client)
 	if (IsClientInGame(client) && IsFakeClient(client) && g_bRoundActive)
 	{
 		new Float:vecBotPosition[3];
-		
-		GetClientAbsOrigin(client, vecBotPosition);			
+
+		GetClientAbsOrigin(client, vecBotPosition);
 		g_vecLastPosition[client][0] = vecBotPosition[0];
 		g_vecLastPosition[client][1] = vecBotPosition[1];
 		g_vecLastPosition[client][2] = vecBotPosition[2];

@@ -9,7 +9,7 @@
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, version 3.0, as published by the
  * Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
@@ -29,24 +29,24 @@
  *
  */
 
-public Action:PlayerDeathEvent(Handle:event, const String:name[], bool:dontBroadcast)   
+public Action:PlayerDeathEvent(Handle:event, const String:name[], bool:dontBroadcast)
 {
 	if (GetConVarInt(hL4DOn))
 	{
 		new client = GetClientOfUserId(GetEventInt(event, "userid"));
 		new attacker = GetClientOfUserId(GetEventInt(event, "attacker"));
-		
+
 		new String:weapon_used[64];
 		GetEventString(event, "weapon", weapon_used, sizeof(weapon_used));
-		
+
 		RemoveSprite(client);
 		RemoveMines(client);
-		
+
 		SetEntityGravity(client, 1.0);
-		
+
 		if (g_Parachute[client] > 0)
 			RemoveParachute(g_Parachute[client], client);
-						
+
 		//Feuersturms Anti Domination thing
 		new domination = GetEventBool(event, "dominated");
 		new revenge = GetEventBool(event, "revenge");
@@ -62,31 +62,31 @@ public Action:PlayerDeathEvent(Handle:event, const String:name[], bool:dontBroad
 			SetEventBool(event, "revenge", false);
 			return Plugin_Continue;
 		}
-				
+
 		g_airstrike[client] = false;
 		g_Shield[client] = false;
-		
+
 		g_hasSprings[client] = false;
-		
+
 		g_AllowedMG[client] = false;
 		g_AllowedRocket[client] = false;
 		g_AllowedSniper[client] = false;
-		
+
 		g_switchSpec[client] = false;
 		g_iBotsStuck[client] = 0;
-						
+
 		g_canTP[client] = true;
-		
+
 		hSkullData[client] = INVALID_HANDLE;
-									
+
 		//Zombie died
 		if(GetClientTeam(client) == AXIS)
-		{		
+		{
 			g_HealthAdded[client] = (g_AlliedWins - g_AxisWins) * 1;
-			
+
 			//Display reasons for dying
 			if (StrEqual(weapon_used, "shield"))
-			{							
+			{
 				if (g_Hints[client])
 				{
 					PrintHelp(client,"You were killed by a Shield", 3);
@@ -95,7 +95,7 @@ public Action:PlayerDeathEvent(Handle:event, const String:name[], bool:dontBroad
 				}
 			}
 			else if (StrEqual(weapon_used, "env_fire"))
-			{							
+			{
 				if (g_Hints[client])
 				{
 					PrintHelp(client,"You were killed by a Molotov", 3);
@@ -103,10 +103,10 @@ public Action:PlayerDeathEvent(Handle:event, const String:name[], bool:dontBroad
 					PrintHelp(client,"*Weapon: The Molotov is fire that kills most Zombies", 0);
 				}
 			}
-			
+
 			//Create the drop - explosions destroy drop
-			if (StrEqual(weapon_used, "molotov") || StrEqual(weapon_used, "env_fire") || StrEqual(weapon_used, "flamethrower") 
-				|| StrEqual(weapon_used, "env_explosion") || StrEqual(weapon_used, "shield") 
+			if (StrEqual(weapon_used, "molotov") || StrEqual(weapon_used, "env_fire") || StrEqual(weapon_used, "flamethrower")
+				|| StrEqual(weapon_used, "env_explosion") || StrEqual(weapon_used, "shield")
 				|| StrEqual(weapon_used, "panzerschreck") || StrEqual(weapon_used, "bazooka")
 				|| StrEqual(weapon_used, "frag_us") || StrEqual(weapon_used, "frag_ger")
 				|| StrEqual(weapon_used, "riflegren_us") || StrEqual(weapon_used, "riflegren_ger"))
@@ -116,16 +116,16 @@ public Action:PlayerDeathEvent(Handle:event, const String:name[], bool:dontBroad
 			else
 			{
 				CreateDrops(client);
-			}				
-							
+			}
+
 			g_ShowSprite[client] = false;
-						
+
 			if (!IsFakeClient(client))
 				CreateTimer(0.01, DeathOverlay, client, TIMER_FLAG_NO_MAPCHANGE);
-			
+
 			//Reset waypoints back to spawn
 			g_WayPoint[client] = 1;
-						
+
 			if (attacker > 0 && attacker != client)
 			{
 				if (IsClientInGame(client) && GetClientTeam(attacker) == ALLIES)
@@ -135,64 +135,64 @@ public Action:PlayerDeathEvent(Handle:event, const String:name[], bool:dontBroad
 					{
 						g_twAmount[attacker]--;
 					}
-					
+
 					if (g_ZombieType[client] == GREYDUDE)
 					{
 						if (IsFakeClient(client))
 							LogToGame("\"%L\" triggered \"KillTheAITank\"", attacker);
 						else
 							LogToGame("\"%L\" triggered \"KillTheTank\"", attacker);
-							
+
 						g_ScoreGreyDude[attacker]++;
 					}
-					
+
 					else if (g_ZombieType[client] == EMO)
 					{
 						if (IsFakeClient(client))
 							LogToGame("\"%L\" triggered \"KillTheAIEmo\"", attacker);
 						else
 							LogToGame("\"%L\" triggered \"KillTheEmo\"", attacker);
-							
+
 						g_ScoreEmo[attacker]++;
 					}
-					
+
 					else if (g_ZombieType[client] == GASMAN)
-					{				
+					{
 						if (IsFakeClient(client))
 							LogToGame("\"%L\" triggered \"KillTheAIGasMan\"", attacker);
 						else
 							LogToGame("\"%L\" triggered \"KillTheGasMan\"", attacker);
-							
+
 						g_ScoreGasMan[attacker]++;
 					}
-					
+
 					else if (g_ZombieType[client] == INFECTEDONE)
 					{
 						if (IsFakeClient(client))
 							LogToGame("\"%L\" triggered \"KillTheAITraitor\"", attacker);
 						else
 							LogToGame("\"%L\" triggered \"KillTheTraitor\"", attacker);
-							
+
 						g_ScoreTraitor[attacker]++;
 					}
-					
+
 					else if (g_ZombieType[client] == WITCH)
 					{
 						if (IsFakeClient(client))
 							LogToGame("\"%L\" triggered \"KillTheAIWitch\"", attacker);
 						else
 							LogToGame("\"%L\" triggered \"KillTheWitch\"", attacker);
-							
+
 						g_ScoreWitch[attacker]++;
 					}
-					
+
 					else if (g_ZombieType[client] == ANARCHIST)
 					{
 						if (IsFakeClient(client))
 							LogToGame("\"%L\" triggered \"KillTheAIFlame\"", attacker);
 						else
 							LogToGame("\"%L\" triggered \"KillTheFlame\"", attacker);
-							
+
 						g_ScoreAnarchist[attacker]++;
 					}
 					else if (g_ZombieType[client] == UNG)
@@ -201,7 +201,7 @@ public Action:PlayerDeathEvent(Handle:event, const String:name[], bool:dontBroad
 							LogToGame("\"%L\" triggered \"KillTheAIUNG\"", attacker);
 						else
 							LogToGame("\"%L\" triggered \"KillTheUNG\"", attacker);
-							
+
 						g_ScoreUNG[attacker]++;
 					}
 					else if (g_ZombieType[client] == WRAITH)
@@ -210,7 +210,7 @@ public Action:PlayerDeathEvent(Handle:event, const String:name[], bool:dontBroad
 							LogToGame("\"%L\" triggered \"KillTheAIWraith\"", attacker);
 						else
 							LogToGame("\"%L\" triggered \"KillTheWraith\"", attacker);
-							
+
 						g_ScoreWraith[attacker]++;
 					}
 					else if (g_ZombieType[client] == SKELETON)
@@ -219,7 +219,7 @@ public Action:PlayerDeathEvent(Handle:event, const String:name[], bool:dontBroad
 							LogToGame("\"%L\" triggered \"KillTheAISkeleton\"", attacker);
 						else
 							LogToGame("\"%L\" triggered \"KillTheSkeleton\"", attacker);
-							
+
 						g_ScoreSkeleton[attacker]++;
 					}
 					else if (g_ZombieType[client] == HELLSPAWN)
@@ -228,7 +228,7 @@ public Action:PlayerDeathEvent(Handle:event, const String:name[], bool:dontBroad
 							LogToGame("\"%L\" triggered \"KillTheAIHellSpawn\"", attacker);
 						else
 							LogToGame("\"%L\" triggered \"KillTheHellSpawn\"", attacker);
-							
+
 						g_ScoreHellSpawn[attacker]++;
 					}
 					else
@@ -238,7 +238,7 @@ public Action:PlayerDeathEvent(Handle:event, const String:name[], bool:dontBroad
 					}
 				}
 			}
-			
+
 			//Play Zombie Death sound
 			if (g_ZombieType[client] != 0)
 			{
@@ -252,7 +252,7 @@ public Action:PlayerDeathEvent(Handle:event, const String:name[], bool:dontBroad
 				if (rnd <= 4)
 					EmitSoundToAll(g_WitchSounds[rnd], client);
 			}
-			
+
 			//Remove any fires
 			g_OnFire[client] = false;
 			if (g_FireParticle[client] != 0)
@@ -260,7 +260,7 @@ public Action:PlayerDeathEvent(Handle:event, const String:name[], bool:dontBroad
 				CreateTimer(0.1, DeleteParticle, g_FireParticle[client], TIMER_FLAG_NO_MAPCHANGE);
 				g_FireParticle[client] = 0;
 			}
-			
+
 			// Respawn the Zombie
 			if (!IsFakeClient(client))
 			{
@@ -268,18 +268,18 @@ public Action:PlayerDeathEvent(Handle:event, const String:name[], bool:dontBroad
 			}
 			else
 				CreateTimer(1.8, TimerRespawnPlayer, client, TIMER_FLAG_NO_MAPCHANGE);
-							
+
 			//Reset the Zombie type
 			g_ZombieType[client] = -1;
 		}
-		
+
 		// Allied player died
 		else if (IsClientInGame(client) && GetClientTeam(client) == ALLIES)
-		{		
+		{
 			//Ticket system
 			if (attacker > 0 && IsClientInGame(attacker) && GetClientTeam(attacker) == AXIS)
 				g_NumberAlliedTickets--;
-				
+
 			if (g_NumberAlliedTickets <= 0)
 			{
 				SetWinningTeam(AXIS);
@@ -287,9 +287,9 @@ public Action:PlayerDeathEvent(Handle:event, const String:name[], bool:dontBroad
 				g_inProgress = false;
 			}
 			else
-			{	
+			{
 				new iMaxTickets = GetConVarInt(hL4DTickets);
-				
+
 				for (new i=1; i <= MaxClients; i++)
 				{
 					if (IsClientInGame(i) && !IsFakeClient(i))
@@ -308,11 +308,11 @@ public Action:PlayerDeathEvent(Handle:event, const String:name[], bool:dontBroad
 					}
 				}
 			}
-			
-			CreateTimer(0.01, DeathOverlay, client, TIMER_FLAG_NO_MAPCHANGE);	
-			
+
+			CreateTimer(0.01, DeathOverlay, client, TIMER_FLAG_NO_MAPCHANGE);
+
 			CreateTimer(5.0, RandomHelp, client, TIMER_FLAG_NO_MAPCHANGE);
-			
+
 			if (GetConVarInt(hL4DDrops))
 			{
 				new random = GetRandomInt(0,100);
@@ -333,65 +333,65 @@ public Action:PlayerDeathEvent(Handle:event, const String:name[], bool:dontBroad
 						CreateTimer(1.0, SpawnHealthBox, client, TIMER_FLAG_NO_MAPCHANGE);
 					}
 				}
-				
+
 				if (g_numDroppedHealth[client] > 1)
 				{
 					CreateTimer(1.0, SpawnHealthBox, client, TIMER_FLAG_NO_MAPCHANGE);
 					g_numDroppedHealth[client] = 0;
 				}
 			}
-			
+
 			g_bPlayerDead[client] = true;
-									
+
 			if (attacker > 0 && attacker < MaxClients+1 && attacker != client && IsClientInGame(attacker))
-			{		
+			{
 				if (GetClientTeam(attacker) == AXIS)
-				{						
+				{
 					EmitSoundToClient(attacker, "npc/fast_zombie/idle1.wav");
-					
+
 					// Killer was a Zombie
 					if (IsFakeClient(attacker))
 					{
 						//If human killed by bot zombie, remove a kill
 						LogToGame("\"%L\" triggered \"KilledbyBot\"", client);
-						
+
 						//Prevents the bot TP away when it makes a kill
 						g_canTP[attacker] = false;
 						CreateTimer(5.0, AllowBotTeleport, attacker, TIMER_FLAG_NO_MAPCHANGE);
-						
+
 						//g_wasTP contains the clientID of the player playing GreyDude
 						if (g_wasTP[attacker] > 0 && IsClientInGame(g_wasTP[attacker]))
 						{
 							LogToGame("\"%L\" triggered \"KillHumanGreyDude\"", g_wasTP[attacker]);
-							
+
 							SetEntProp(g_wasTP[attacker], Prop_Data, "m_iFrags", GetClientFrags(g_wasTP[attacker]) + 1);
-							
+
 							if (g_Hints[client])
 							{
 								PrintHelp(client,"You were killed by the Grey Dude", 3);
 								PrintHelp(client,"*You were killed by the Grey Dude", 0);
 								PrintHelp(client,"*The Grey Dude spawned Zombies near you", 0);
-								
+
 								PrintToChat(g_wasTP[attacker],"*One of your minions killed %N", client);
 							}
 						}
-						
+
 						if (g_ZombieType[attacker] == 4 && StrEqual(weapon_used, "env_explosion"))
-						{							
+						{
 							if (g_Hints[client])
 							{
 								PrintHelp(client,"You were killed by the Emo", 3);
 								PrintHelp(client,"*You were killed by the Emo", 0);
 								PrintHelp(client,"*Emo Weapon: Suicide bomb", 0);
 							}
-							
+
 							SetEntProp(attacker, Prop_Data, "m_iFrags", GetClientFrags(attacker) + 1);
-							
+
 							RemoveRagdoll(client);
 						}
-							
+
 						else if (g_ZombieType[attacker] == 5 && StrEqual(weapon_used, "prop_physics"))
-						{							
+						{
 							if (g_Hints[client])
 							{
 								PrintHelp(client,"You were killed by the Anarchist", 3);
@@ -399,9 +399,9 @@ public Action:PlayerDeathEvent(Handle:event, const String:name[], bool:dontBroad
 								PrintHelp(client,"*Anarchist Weapon: Exploding skull", 0);
 							}
 						}
-						
+
 						else if (g_ZombieType[attacker] == 7 && StrEqual(weapon_used, "suck"))
-						{							
+						{
 							if (g_Hints[client])
 							{
 								PrintHelp(client,"You were killed by the Wraith", 3);
@@ -409,7 +409,7 @@ public Action:PlayerDeathEvent(Handle:event, const String:name[], bool:dontBroad
 								PrintHelp(client,"*Wraith Weapon: Sucks your health away", 0);
 							}
 						}
-						
+
 						else if (g_ZombieType[attacker] == SKELETON)
 						{
 							if (g_Hints[client])
@@ -418,37 +418,37 @@ public Action:PlayerDeathEvent(Handle:event, const String:name[], bool:dontBroad
 								PrintHelp(client,"*You were killed by the Skeleton", 0);
 							}
 						}
-						
+
 						g_wasTP[attacker] = 0;
 					}
-								
+
 					else if (!IsFakeClient(attacker))
 					{
 						//Scoring for Zombie humans
 						g_ScoreHumans[attacker]++;
-						
+
 						SetEntProp(attacker, Prop_Data, "m_iFrags", GetClientFrags(attacker) + 1);
-						
+
 						if (g_ZombieType[attacker] == 4 && StrEqual(weapon_used, "env_explosion"))
 						{
 							LogToGame("\"%L\" triggered \"KillHumanBomb\"", attacker);
-							
+
 							if (g_Hints[client])
 							{
 								PrintHelp(client,"You were killed by the Emo", 3);
 								PrintHelp(client,"*You were killed by the Emo", 0);
 								PrintHelp(client,"*Emo Weapon: Suicide bomb", 0);
 							}
-							
+
 							SetEntProp(attacker, Prop_Data, "m_iFrags", GetClientFrags(attacker) + 1);
-							
+
 							RemoveRagdoll(client);
 						}
-							
+
 						else if (g_ZombieType[attacker] == 5 && StrEqual(weapon_used, "prop_physics"))
 						{
 							LogToGame("\"%L\" triggered \"KillHumanSkull\"", attacker);
-							
+
 							if (g_Hints[client])
 							{
 								PrintHelp(client,"You were killed by the Anarchist", 3);
@@ -456,11 +456,11 @@ public Action:PlayerDeathEvent(Handle:event, const String:name[], bool:dontBroad
 								PrintHelp(client,"*Anarchist Weapon: Exploding skull", 0);
 							}
 						}
-						
+
 						else if (g_ZombieType[attacker] == 2 && StrEqual(weapon_used, "gasbomb"))
 						{
 							LogToGame("\"%L\" triggered \"KillHumanGas\"", attacker);
-							
+
 							if (g_Hints[client])
 							{
 								PrintHelp(client,"You were killed by the Gas Man", 3);
@@ -468,14 +468,14 @@ public Action:PlayerDeathEvent(Handle:event, const String:name[], bool:dontBroad
 								PrintHelp(client,"*Gas Man Weapon: Gas", 0);
 							}
 						}
-							
+
 						else if (g_ZombieType[attacker] == 3 && StrEqual(weapon_used, "amerknife"))
 							LogToGame("\"%L\" triggered \"KillHumanInfected\"", attacker);
-							
+
 						else if (g_ZombieType[attacker] == SKELETON)
 						{
 							LogToGame("\"%L\" triggered \"KillHumanSkeleton\"", attacker);
-							
+
 							if (g_Hints[client])
 							{
 								PrintHelp(client,"You were killed by the Skeleton", 3);
@@ -483,12 +483,12 @@ public Action:PlayerDeathEvent(Handle:event, const String:name[], bool:dontBroad
 								PrintHelp(client,"*Skeletons can only be killed by melee", 0);
 							}
 						}
-						
+
 						else if (g_ZombieType[attacker] == UNG)
 							LogToGame("\"%L\" triggered \"KillHumanUNG\"", attacker);
-						
+
 						else if (g_ZombieType[attacker] == 7 && StrEqual(weapon_used, "suck"))
-						{			
+						{
 							LogToGame("\"%L\" triggered \"KillHumanWraithSuck\"", attacker);
 							if (g_Hints[client])
 							{
@@ -497,7 +497,7 @@ public Action:PlayerDeathEvent(Handle:event, const String:name[], bool:dontBroad
 								PrintHelp(client,"*Wraith Weapon: Sucks your health away", 0);
 							}
 						}
-														
+
 						else
 							LogToGame("\"%L\" triggered \"KillHuman\"", attacker);
 
@@ -517,7 +517,7 @@ public Action:PlayerDeathEvent(Handle:event, const String:name[], bool:dontBroad
 					}
 				}
 			}
-			
+
 			//Allow bots to retarget
 			for (new i = 1; i <= MaxClients; i++)
 			{
@@ -528,7 +528,7 @@ public Action:PlayerDeathEvent(Handle:event, const String:name[], bool:dontBroad
 				}
 			}
 		}
-				
+
 		g_OnFire[client] = false;
 	}
 	return Plugin_Continue;

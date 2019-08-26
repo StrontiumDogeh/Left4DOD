@@ -9,7 +9,7 @@
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License, version 3.0, as published by the
  * Free Software Foundation.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
@@ -29,19 +29,19 @@
  *
  */
  //g_iMines -> Number of planted mines
- //g_numMines - > total number of Mines 
- //g_iDroppedMine -> entities of mines 
+ //g_numMines - > total number of Mines
+ //g_iDroppedMine -> entities of mines
 
 //############################ SKULLS ##########################################
 
 DetonateMines(client)
 {
-	
+
 	for (new i = 1; i <= MINES; i++)
 	{
 		if (g_iDroppedMine[client][i] > 0)
 			ExplodeMine(g_iDroppedMine[client][i], client);
-			
+
 		g_iDroppedMine[client][i] = 0;
 	}
 }
@@ -59,7 +59,7 @@ RemoveMines(client)
 				AcceptEntityInput(g_iDroppedMine[client][i], "Kill");
 			}
 		}
-			
+
 		g_iDroppedMine[client][i] = 0;
 	}
 }
@@ -67,27 +67,27 @@ RemoveMines(client)
 ExplodeMine(ent, owner)
 {
 	if (IsValidEntity(ent) && IsValidEdict(ent))
-	{		
+	{
 		new String:classname[256];
 		GetEdictClassname(ent, classname, sizeof(classname));
 		if (StrEqual(classname, "prop_physics", false))
 		{
 			new Float:vecExplosion[3];
 			GetEntDataVector(ent, g_oEntityOrigin, vecExplosion);
-			
+
 			SetEntPropEnt(ent, Prop_Data, "m_hOwnerEntity", owner);
-			
+
 			new String:addoutput[64];
 			Format(addoutput, sizeof(addoutput), "OnUser2 !self:break::%f:1", 0.1);
 			SetVariantString(addoutput);
 			AcceptEntityInput(ent, "AddOutput");
 			AcceptEntityInput(ent, "FireUser2");
-			
+
 			Format(addoutput, sizeof(addoutput), "OnUser1 !self:kill::%f:1", 1.0);
 			SetVariantString(addoutput);
 			AcceptEntityInput(ent, "AddOutput");
 			AcceptEntityInput(ent, "FireUser1");
-			
+
 			new shake = CreateEntityByName("env_shake");
 			DispatchKeyValueFloat(shake, "amplitude", 300.0);
 			DispatchKeyValueFloat(shake, "radius", 200.0);
@@ -98,8 +98,8 @@ ExplodeMine(ent, owner)
 			AcceptEntityInput(shake, "StartShake");
 			TeleportEntity(shake, vecExplosion, NULL_VECTOR, NULL_VECTOR);
 			CreateTimer(1.1, DestroyShake, shake, TIMER_FLAG_NO_MAPCHANGE);
-				
-			PositionParticle(vecExplosion, "explosion_huge_c", 2.0);	
+
+			PositionParticle(vecExplosion, "explosion_huge_c", 2.0);
 		}
 	}
 }
@@ -107,24 +107,24 @@ ExplodeMine(ent, owner)
 public Action:ReplaceNade(Handle:timer, Handle:pack)
 {
 	new Float:vLoc[3];
-	
+
 	ResetPack(pack);
 	new client = ReadPackCell(pack);
 	new nade = ReadPackCell(pack);
-		
+
 	if (IsValidEntity(nade) && IsValidEdict(nade) && nade > MaxClients)
-	{		
+	{
 		GetEntDataVector(nade, g_oEntityOrigin, vLoc);
-			
+
 		new String:classname[256];
 		GetEdictClassname(nade, classname, sizeof(classname));
 		if (StrEqual(classname, "grenade_frag_ger", false))
 		{
 			AcceptEntityInput(nade, "kill");
 		}
-		
+
 		new ent = CreateEntityByName("prop_physics_override");
-		
+
 		if (IsValidEntity(ent))
 		{
 			//look for a free mine slot
@@ -137,17 +137,17 @@ public Action:ReplaceNade(Handle:timer, Handle:pack)
 					break;
 				}
 			}
-			
+
 			//if all mine slots used, detonate the lot and start again
 			if (freemine == 0)
 			{
 				DetonateMines(client);
 				freemine = 1;
 			}
-			
+
 			g_iDroppedMine[client][freemine] = ent;
-			
-			SetEntityModel(ent, "models/weapons/w_bugbait.mdl");	
+
+			SetEntityModel(ent, "models/weapons/w_bugbait.mdl");
 			new String:minename[16];
 			Format(minename, sizeof(minename), "Mine%i", g_MineNumber);
 			DispatchKeyValue(ent, "StartDisabled", "false");
@@ -162,31 +162,31 @@ public Action:ReplaceNade(Handle:timer, Handle:pack)
 			SetEntPropEnt(ent, Prop_Data, "m_hOwnerEntity", client);
 			SetEntPropEnt(ent, Prop_Data, "m_hLastAttacker", client);
 			SetEntPropEnt(ent, Prop_Data, "m_hPhysicsAttacker", client);
-			
+
 			#if DEBUG
 				LogToFileEx(g_szLogFileName,"[L4DOD] Created Mine:%i", ent);
 			#endif
-									
+
 			TeleportEntity(ent, vLoc, NULL_VECTOR, NULL_VECTOR);
 			SetEntityMoveType(ent, MOVETYPE_NONE);
 			SDKHook(ent, SDKHook_OnTakeDamage, MineHit);
-			
+
 			AttachParticle(ent, "fire_small_base", 10.0);
 		}
 	}
 }
 
 public Action:HookGrenadeThink(ent)
-{	
+{
 	new Float:vLoc[3], Float:fDistance;
 	GetEntDataVector(ent, g_oEntityOrigin, vLoc);
-	
+
 	g_iMineData[ent]++;
-	
+
 	// Find decelaration
 	fDistance = GetVectorLength(vLoc);
 	new Float:fSpeed = g_fLastMineLength[ent] - fDistance;
-	
+
 	// Impact
 	if (g_iMineData[ent] > 5)
 	{
@@ -194,16 +194,16 @@ public Action:HookGrenadeThink(ent)
 		{
 			SetEntityMoveType(ent, MOVETYPE_NONE);
 			ChangeEdictState(ent, 0);
-			
+
 			SDKUnhook(ent, SDKHook_VPhysicsUpdate, HookGrenadeThink);
 		}
 	}
-	
+
 	g_fLastMineLength[ent] = fDistance;
 	return Plugin_Handled;
 }
 
 public Action:MineHit(entity, &attacker, &inflictor, &Float:fDamage, &damagetype, &weapon, Float:damageForce[3], Float:damagePosition[3])
-{	
+{
 	SetEntityMoveType(entity, MOVETYPE_VPHYSICS );
 }
