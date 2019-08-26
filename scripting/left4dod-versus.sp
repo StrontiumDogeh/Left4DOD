@@ -823,15 +823,15 @@ public OnPluginStart()
 	SetConVarFlags(sv_cheats, cvarCheatsflags);
 
 	//OFFSETS
-	g_oAmmo = FindSendPropOffs("CDODPlayer", "m_iAmmo");
+	g_oAmmo = FindSendPropInfo("CDODPlayer", "m_iAmmo");
 	g_offsetClip1 = FindSendPropInfo("CBaseCombatWeapon", "m_iClip1");
-	g_oEntityOrigin = FindSendPropOffs("CDODPlayer", "m_vecOrigin");
-	g_oOwner = FindSendPropOffs("CDODObjectiveResource", "m_iOwner");
-	g_oAlliesTime = FindSendPropOffs("CDODObjectiveResource", "m_flAlliesCapTime");
-	g_oAxisTime = FindSendPropOffs("CDODObjectiveResource", "m_flAxisCapTime");
-	g_oAlliesCaps = FindSendPropOffs("CDODObjectiveResource", "m_iAlliesReqCappers");
-	g_oAxisCaps = FindSendPropOffs("CDODObjectiveResource", "m_iAxisReqCappers");
-	g_oWeaponParent = FindSendPropOffs("CBaseCombatWeapon", "m_hOwnerEntity");
+	g_oEntityOrigin = FindSendPropInfo("CDODPlayer", "m_vecOrigin");
+	g_oOwner = FindSendPropInfo("CDODObjectiveResource", "m_iOwner");
+	g_oAlliesTime = FindSendPropInfo("CDODObjectiveResource", "m_flAlliesCapTime");
+	g_oAxisTime = FindSendPropInfo("CDODObjectiveResource", "m_flAxisCapTime");
+	g_oAlliesCaps = FindSendPropInfo("CDODObjectiveResource", "m_iAlliesReqCappers");
+	g_oAxisCaps = FindSendPropInfo("CDODObjectiveResource", "m_iAxisReqCappers");
+	g_oWeaponParent = FindSendPropInfo("CBaseCombatWeapon", "m_hOwnerEntity");
 
 	decl String:logpath[PLATFORM_MAX_PATH];
 	FormatTime(logpath, sizeof(logpath), "logs/l4dod%Y%m%d.log");

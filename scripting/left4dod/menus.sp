@@ -1030,7 +1030,7 @@ public Action:CheckLanding(Handle:timer, Handle:datapack)
 
 	if (IsClientInGame(client) && IsPlayerAlive(client))
 	{
-		GetEntDataVector(client, FindSendPropOffs("CBasePlayer", "m_vecVelocity[0]"), velocity);
+		GetEntDataVector(client, FindSendPropInfo("CBasePlayer", "m_vecVelocity[0]"), velocity);
 
 		new entity_flags = GetEntityFlags(client);
 

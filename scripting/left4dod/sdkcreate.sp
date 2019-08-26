@@ -87,10 +87,10 @@ public OnRocketThink(entity)
 {
 	static offsetOwner, offsetOrigin, offsetRotation, offsetVelocity;
 
-	offsetOwner = FindDataMapOffs(entity, "m_hOwnerEntity");
-	offsetOrigin = FindDataMapOffs(entity, "m_vecAbsOrigin");
-	offsetRotation = FindDataMapOffs(entity, "m_angRotation");
-	offsetVelocity = FindDataMapOffs(entity, "m_vecAbsVelocity");
+	offsetOwner = FindDataMapInfo(entity, "m_hOwnerEntity");
+	offsetOrigin = FindDataMapInfo(entity, "m_vecAbsOrigin");
+	offsetRotation = FindDataMapInfo(entity, "m_angRotation");
+	offsetVelocity = FindDataMapInfo(entity, "m_vecAbsVelocity");
 
 	new owner = GetEntDataEnt2(entity, offsetOwner);
 

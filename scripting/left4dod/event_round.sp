@@ -196,8 +196,8 @@ public Action:RoundStartEvent(Handle:event, const String:name[], bool:dontBroadc
 				}
 
 				//Get the default captures for each flag
-				new alliesoffset = FindSendPropOffs("CDODObjectiveResource", "m_iAlliesReqCappers");
-				new axisoffset = FindSendPropOffs("CDODObjectiveResource", "m_iAxisReqCappers");
+				new alliesoffset = FindSendPropInfo("CDODObjectiveResource", "m_iAlliesReqCappers");
+				new axisoffset = FindSendPropInfo("CDODObjectiveResource", "m_iAxisReqCappers");
 
 				g_flagAlliedDefCaps[i] = GetEntData(g_iObjectiveResource, alliesoffset + (i * 4));
 				g_flagAxisDefCaps[i]	= GetEntData(g_iObjectiveResource, axisoffset + (i * 4));
