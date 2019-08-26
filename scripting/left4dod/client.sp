@@ -101,12 +101,6 @@ public OnClientPostAdminCheck(client)
 		if (member_type == 2)
 		{
 			g_IsMember[client] = 2;
-
-			if (!(GetUserFlagBits(client) & ADMFLAG_VOTE))
-			{
-				AddUserFlags(client, Admin_Vote);
-				LogToFileEx(g_szLogFileName,"[L4DOD] Added %N to temporary admin list", client);
-			}
 		}
 		else if (member_type == 1)
 		{
