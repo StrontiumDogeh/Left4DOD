@@ -31,6 +31,8 @@
 
 public OnMapStart()
 {
+	Steam_SetGameDescription("Left4DoD");
+
 	SetLightStyle(0,"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbba");
 	SetRandomSeed(GetTime());
 	new rndSky = GetRandomInt(0,6);

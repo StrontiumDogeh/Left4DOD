@@ -702,6 +702,8 @@ public OnPluginStart()
 {
 	CreateConVar("left4dod", PLUGIN_VERSION, " Left4DoD Version", FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY);
 
+	Steam_SetGameDescription("Left4DoD");
+
 	hL4DOn    					= CreateConVar("l4dod_enabled", "1", " Turn on/off Left4DoD");
 	hL4DSetup 				= CreateConVar("l4dod_setup", "0", " Allows an Admin to set up waypoints");
 	hL4DGameType				= CreateConVar("l4dod_gametype", "0", " 0=Versus 1=Coop 2=Tournament");
