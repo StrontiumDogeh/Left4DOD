@@ -42,8 +42,6 @@
 #include <sdkhooks>
 #include <clientprefs>
 #include <morecolors>
-
-#define AUTOLOAD_EXTENSIONS
 #include <steamtools>
 
 //See also line 879
