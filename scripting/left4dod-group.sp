@@ -25,7 +25,7 @@ public Plugin:myinfo = {
 
 public OnPluginStart()
 {
-	CreateConVar("left4dod_group", PLUGIN_VERSION, " Left4DoD Group Check Version", FCVAR_PLUGIN|FCVAR_SPONLY|FCVAR_REPLICATED);
+	CreateConVar("left4dod_group", PLUGIN_VERSION, " Left4DoD Group Check Version", FCVAR_SPONLY|FCVAR_REPLICATED);
 	LoadTranslations("common.phrases");
 
 	Steam_SetGameDescription("Left4DoD");

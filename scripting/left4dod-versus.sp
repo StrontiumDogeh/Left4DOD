@@ -695,18 +695,18 @@ public Plugin:myinfo =
 
 public OnPluginStart()
 {
-	CreateConVar("left4dod", PLUGIN_VERSION, " Left4DoD Version", FCVAR_PLUGIN|FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY);
+	CreateConVar("left4dod", PLUGIN_VERSION, " Left4DoD Version", FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY);
 
-	hL4DOn    					= CreateConVar("l4dod_enabled", "1", " Turn on/off Left4DoD", FCVAR_PLUGIN);
-	hL4DSetup 				= CreateConVar("l4dod_setup", "0", " Allows an Admin to set up waypoints", FCVAR_PLUGIN);
-	hL4DGameType				= CreateConVar("l4dod_gametype", "0", " 0=Versus 1=Coop 2=Tournament", FCVAR_PLUGIN);
-	hL4DAI						= CreateConVar("l4dod_ai", "0", " Unbalances teams", FCVAR_PLUGIN);
-	hL4DFright				= CreateConVar("left4dod_fright", "0", " Set ambience <0|1>", FCVAR_PLUGIN|FCVAR_REPLICATED|FCVAR_NOTIFY);
-	hL4DSpawnProtection	= CreateConVar("l4dod_sp", "4", " Spawn protection", FCVAR_PLUGIN);
-	hL4DSpawnDistance		= CreateConVar("l4dod_distance", "400.0", " Distance from spawn within which dmg occurs", FCVAR_PLUGIN);
-	hL4DSI						= CreateConVar("l4dod_si", "1", " Allow special infected", FCVAR_PLUGIN);
-	hL4DDrops					= CreateConVar("l4dod_drops", "1", " Allow drops", FCVAR_PLUGIN);
-	hL4DTickets				= CreateConVar("l4dod_tickets", "50", " Number of tickets", FCVAR_PLUGIN);
+	hL4DOn    					= CreateConVar("l4dod_enabled", "1", " Turn on/off Left4DoD");
+	hL4DSetup 				= CreateConVar("l4dod_setup", "0", " Allows an Admin to set up waypoints");
+	hL4DGameType				= CreateConVar("l4dod_gametype", "0", " 0=Versus 1=Coop 2=Tournament");
+	hL4DAI						= CreateConVar("l4dod_ai", "0", " Unbalances teams");
+	hL4DFright				= CreateConVar("left4dod_fright", "0", " Set ambience <0|1>", FCVAR_REPLICATED|FCVAR_NOTIFY);
+	hL4DSpawnProtection	= CreateConVar("l4dod_sp", "4", " Spawn protection");
+	hL4DSpawnDistance		= CreateConVar("l4dod_distance", "400.0", " Distance from spawn within which dmg occurs");
+	hL4DSI						= CreateConVar("l4dod_si", "1", " Allow special infected");
+	hL4DDrops					= CreateConVar("l4dod_drops", "1", " Allow drops");
+	hL4DTickets				= CreateConVar("l4dod_tickets", "50", " Number of tickets");
 
 	RegAdminCmd("sm_waypoint", Command_Waypoint, ADMFLAG_CONVARS, " sm_waypoint <add|show> <# waypoint set>");
 	RegAdminCmd("sm_where", Command_Location, ADMFLAG_CONVARS, " sm_where ");
