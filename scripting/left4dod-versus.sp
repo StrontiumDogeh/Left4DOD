@@ -48,7 +48,7 @@
 #undef REQUIRE_EXTENSIONS
 #include <dodhooks>
 
-#define PLUGIN_VERSION "5.3.200"
+#define PLUGIN_VERSION "5.4.300"
 
 #define DEBUG 0
 
