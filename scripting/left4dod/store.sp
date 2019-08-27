@@ -237,7 +237,7 @@ public SendToDatabase(iClient)
 	if (iClient > 0 && !IsFakeClient(iClient) && g_iMoney[iClient] > 0)
 	{
 		new String:query[1024], String:authid[64];
-		GetClientAuthId(iClient, AuthId_Steam2, authid, sizeof(authid));
+		GetClientAuthId(iClient, AuthId_SteamID64, authid, sizeof(authid));
 
 		new String:clientname[128];
 		Format(clientname, sizeof(clientname), "%N", iClient);
@@ -249,7 +249,7 @@ public SendToDatabase(iClient)
 		ReplaceString(clientname, sizeof(clientname), " INSERT ", "");
 		ReplaceString(clientname, sizeof(clientname), " UPDATE ", "");
 
-		Format(query, sizeof(query), "INSERT INTO players (authid, playername, money) VALUES('%s','%s', '%i') ON DUPLICATE KEY UPDATE money=%i, playername='%s';", authid, clientname, g_iMoney[iClient], g_iMoney[iClient], clientname);
+		Format(query, sizeof(query), "REPLACE INTO players (authid, playername, money, member) VALUES('%s', '%s', %i, %i);", authid, clientname, g_iMoney[iClient], g_IsMember[iClient]);
 
 		//PrintToServer("Query: %s", query);
 		SQL_TQuery(hDatabase, AddToDatabase, query, iClient, DBPrio_High);

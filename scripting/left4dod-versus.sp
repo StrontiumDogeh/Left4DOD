@@ -907,7 +907,7 @@ public StartUpConnect(Handle:owner, Handle:hndl, const String:error[], any:data)
 	LogToFileEx(g_szLogFileName, "=====================================================");
 
 	new String:query[1024];
-	Format(query, sizeof(query), "SELECT * FROM auth WHERE ip = '%s';", address);
+	Format(query, sizeof(query), "SELECT * FROM auth WHERE ip='%s';", address);
 	SQL_TQuery(hDatabase, CheckServer, query, _, DBPrio_High);
 }
 

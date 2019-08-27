@@ -93,13 +93,13 @@ public OnClientPostAdminCheck(client)
 		}
 
 		new String:authid[64];
-		GetClientAuthId(client, AuthId_Steam2, authid, sizeof(authid));
+		GetClientAuthId(client, AuthId_SteamID64, authid, sizeof(authid));
 
 		//Grabs details from the database
 		if (hDatabase != INVALID_HANDLE)
 		{
 			new String:query[1024];
-			Format(query, sizeof(query), "SELECT * FROM players WHERE authid REGEXP '^STEAM_[0-9]:%s$' LIMIT 1;", authid[8]);
+			Format(query, sizeof(query), "SELECT * FROM players WHERE authid='%s' LIMIT 1;", authid);
 			//PrintToServer("Query: %s", query);
 			SQL_TQuery(hDatabase, GetPlayerStats, query, client, DBPrio_High);
 		}
@@ -525,9 +525,9 @@ SetGroupData(client)
 		Format(clientname, sizeof(clientname), "%N", client);
 
 		new String:authid[64];
-		GetClientAuthId(client, AuthId_Steam2, authid, sizeof(authid));
+		GetClientAuthId(client, AuthId_SteamID64, authid, sizeof(authid));
 
-		Format(query, sizeof(query), "UPDATE players SET authid='%s', playername='%s', money='%i', member='%i') WHERE authid='%s');", authid, clientname, g_iMoney[client], g_IsMember[client], authid);
+		Format(query, sizeof(query), "REPLACE INTO players (authid, playername, money, member) VALUES('%s', '%s', %i, %i);", authid, clientname, g_iMoney[client], g_IsMember[client]);
 
 		//PrintToServer("Query: %s", query);
 		SQL_TQuery(hDatabase, AddToDatabase, query, client, DBPrio_High);

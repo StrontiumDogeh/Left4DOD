@@ -156,7 +156,7 @@ public GameOverEvent(Handle:event, const String:name[], bool:dontBroadcast)
 		Format(address, sizeof(address), "%s:%s", ServerIp, port);
 
 		new String:query[1024];
-		Format(query, sizeof(query), "INSERT INTO game (mapname, alliedwins, axiswins, gametype, server, players) VALUES('%s', '%i', '%i', '%i', '%s', '%i');", g_szMapName, g_AlliedWins, g_AxisWins, GetConVarInt(hL4DGameType), address, humans);
+		Format(query, sizeof(query), "INSERT INTO game (mapname, alliedwins, axiswins, gametype, server, players) VALUES('%s', %i, %i, %i, '%s', %i);", g_szMapName, g_AlliedWins, g_AxisWins, GetConVarInt(hL4DGameType), address, humans);
 
 		//PrintToServer("Query: %s", query);
 		SQL_TQuery(hDatabase, AddToDatabase, query, _, DBPrio_High);
