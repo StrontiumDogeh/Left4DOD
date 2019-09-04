@@ -31,11 +31,11 @@
 #define HIDEHUD_ALL         	( 1<<2 )
 
 static const String:name_list[][] = { "Screeching Console",
-"Machete Max", "Zombie Crixsis", "Zombie Pravda", "Vet Zombie", "Rebel Zombie",
-"Maurice Mosher", "Creepy Creeper", "Zombie Tseeneth",  "Zombie MRKI", "Zombie Boki",
-"Zombie Defender", "Zombie Oldboy", "Zombie Blindschleiche", "Ghilliezombie", "Zombie Aleboy",
-"Zombie Papa", "Aardvark Zombie", "Zombie Podunktologist", "Zombie Klaus", "Zombie Store", "Zombie Boots", "Zombie WetSeal",
-"Zombie Ion", "Zombie Transit", "Zombie Rugedog", "Masher Carrie", "Donny Osmond",
+"John Doe Zombie", "Black and Blue Zombie", "Slasher Stevo", "Vet Zombie", "Boss Llama Zombie",
+"Dead Lite", "Zombie Flash", "Zombie Larry",  "Zombie Eumoria", "Zombie Winky",
+"Zombie c4ridw3n", "Zombie Biscuit", "Zombie Gizanked", "Zombie Stutter", "Zombie BETTEH",
+"Zombie Inner", "Zombie Plinko", "Zombie Powdermilkman", "Zombie Potato", "Zombie Dog", "Zombie.TVR", "<TVB>Zombie",
+"<eVa>Zombie", "-=USV=-Zombie", "YNWA Zombie", "Masher Carrie", "Zombie Gruel",
 "The Carrot of Doom", "Aaaaargh", "Putrid Paul", "Gruesome Gator", "Septic Simon"
  };
 
