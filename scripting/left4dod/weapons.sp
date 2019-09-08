@@ -63,8 +63,8 @@ public Action:WeaponEvent(Handle:event, const String:name[], bool:dontBroadcast)
 				{
 					if (IsValidEntity(ent))
 					{
-						TE_SetupBeamFollow(ent, BeamSprite, 0, Float:6.0, Float:10.0, Float:10.0, 5, g_AlliesColour);
-						TE_SendToAll();
+						//TE_SetupBeamFollow(ent, BeamSprite, 0, Float:6.0, Float:10.0, Float:10.0, 5, g_AlliesColour);
+						//TE_SendToAll();
 
 						if (GetEntPropEnt(ent, Prop_Send, "m_hThrower") == attacker)
 						{
@@ -82,8 +82,8 @@ public Action:WeaponEvent(Handle:event, const String:name[], bool:dontBroadcast)
 				{
 					if (IsValidEntity(ent))
 					{
-						TE_SetupBeamFollow(ent, BeamSprite, 0, Float:5.0, Float:10.0, Float:10.0, 5, g_AlliesColour);
-						TE_SendToAll();
+						//TE_SetupBeamFollow(ent, BeamSprite, 0, Float:5.0, Float:10.0, Float:10.0, 5, g_AlliesColour);
+						//TE_SendToAll();
 
 						if (GetConVarBool(hL4DFright))
 						{
@@ -101,8 +101,8 @@ public Action:WeaponEvent(Handle:event, const String:name[], bool:dontBroadcast)
 				{
 					if (IsValidEntity(ent))
 					{
-						TE_SetupBeamFollow(ent, BeamSprite, 0, Float:5.0, Float:10.0, Float:10.0, 5, g_AlliesColour);
-						TE_SendToAll();
+						//TE_SetupBeamFollow(ent, BeamSprite, 0, Float:5.0, Float:10.0, Float:10.0, 5, g_AlliesColour);
+						//TE_SendToAll();
 
 						if (GetConVarBool(hL4DFright))
 						{
@@ -122,8 +122,8 @@ public Action:WeaponEvent(Handle:event, const String:name[], bool:dontBroadcast)
 					{
 						//stock TE_SetupBeamFollow(EntIndex, ModelIndex, HaloIndex, Float:Life, Float:Width, Float:EndWidth, FadeLength, const Color[4])
 
-						TE_SetupBeamFollow(ent, BeamSprite, 0, Float:5.0, Float:10.0, Float:10.0, 5, g_AlliesColour);
-						TE_SendToAll();
+						//TE_SetupBeamFollow(ent, BeamSprite, 0, Float:5.0, Float:10.0, Float:10.0, 5, g_AlliesColour);
+						//TE_SendToAll();
 
 						if (GetConVarBool(hL4DFright))
 						{
@@ -153,8 +153,8 @@ public Action:WeaponEvent(Handle:event, const String:name[], bool:dontBroadcast)
 						new owner = GetEntPropEnt(ent, Prop_Send, "m_hThrower");
 						if (GetClientTeam(owner) == ALLIES)
 						{
-							TE_SetupBeamFollow(ent, BeamSprite, 0, Float:5.0, Float:10.0, Float:10.0, 5, g_AlliesColour);
-							TE_SendToAll();
+							//TE_SetupBeamFollow(ent, BeamSprite, 0, Float:5.0, Float:10.0, Float:10.0, 5, g_AlliesColour);
+							//TE_SendToAll();
 
 							if (GetConVarBool(hL4DFright))
 							{
@@ -175,8 +175,8 @@ public Action:WeaponEvent(Handle:event, const String:name[], bool:dontBroadcast)
 
 							if (owner == attacker && g_ZombieType[attacker] == SKELETON)
 							{
-								TE_SetupBeamFollow(ent, BeamSprite, 0, Float:5.0, Float:10.0, Float:10.0, 5, g_AxisColour);
-								TE_SendToAll();
+								//TE_SetupBeamFollow(ent, BeamSprite, 0, Float:5.0, Float:10.0, Float:10.0, 5, g_AxisColour);
+								//TE_SendToAll();
 
 								SetEntityModel(ent, "models/weapons/w_bugbait.mdl");
 								SetEntProp(ent, Prop_Send, "m_clrRender", -1);
@@ -199,8 +199,8 @@ public Action:WeaponEvent(Handle:event, const String:name[], bool:dontBroadcast)
 				{
 					if (IsValidEntity(ent))
 					{
-						TE_SetupBeamFollow(ent, BeamSprite, 0, Float:5.0, Float:10.0, Float:10.0, 5, g_AlliesColour);
-						TE_SendToAll();
+						//TE_SetupBeamFollow(ent, BeamSprite, 0, Float:5.0, Float:10.0, Float:10.0, 5, g_AlliesColour);
+						//TE_SendToAll();
 
 						if (GetConVarBool(hL4DFright))
 						{
@@ -232,8 +232,8 @@ public Action:WeaponEvent(Handle:event, const String:name[], bool:dontBroadcast)
 				{
 					if (IsValidEntity(ent))
 					{
-						TE_SetupBeamFollow(ent, BeamSprite, 0, Float:5.0, Float:10.0, Float:10.0, 5, g_AlliesColour);
-						TE_SendToAll();
+						//TE_SetupBeamFollow(ent, BeamSprite, 0, Float:5.0, Float:10.0, Float:10.0, 5, g_AlliesColour);
+						//TE_SendToAll();
 
 						if (GetConVarBool(hL4DFright))
 						{
