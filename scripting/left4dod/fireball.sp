@@ -102,8 +102,8 @@ public FireBalls(client)
 				LogToFileEx(g_szLogFileName,"[L4DOD] Attached Particle to Fireball:%i", ent);
 			#endif
 
-			TE_SetupBeamFollow(ent, BeamSprite, 0, Float:4.0, Float:10.0, Float:10.0, 5, g_AxisColour);
-			TE_SendToAll();
+			//TE_SetupBeamFollow(ent, BeamSprite, 0, Float:4.0, Float:10.0, Float:10.0, 5, g_AxisColour);
+			//TE_SendToAll();
 
 			new Handle:pack;
 			hFireballData[client] = CreateDataTimer(2.0, CheckFireball, pack, TIMER_FLAG_NO_MAPCHANGE);
