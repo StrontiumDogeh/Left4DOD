@@ -86,8 +86,8 @@ public Action:CreateBomblets(Handle:timer, Handle:bomblet_data)
 
 	EmitSoundToAll("weapons/grenade/tick1.wav", ent);
 
-	TE_SetupBeamFollow(ent, BeamSprite, 0, Float:5.0, Float:10.0, Float:10.0, 5, g_AlliesColour);
-	TE_SendToAll();
+	//TE_SetupBeamFollow(ent, BeamSprite, 0, Float:5.0, Float:10.0, Float:10.0, 5, g_AlliesColour);
+	//TE_SendToAll();
 
 	new String:addoutput[64];
 	Format(addoutput, sizeof(addoutput), "OnUser1 !self:break::%f:1", 2.0);
