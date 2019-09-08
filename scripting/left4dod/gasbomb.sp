@@ -92,8 +92,8 @@ public GasBomb(client)
 
 			TeleportEntity(ent, SpawnAt, rotate, origin);
 
-			TE_SetupBeamFollow(ent, BeamSprite, 0, Float:4.0, Float:10.0, Float:10.0, 5, g_AxisColour);
-			TE_SendToAll();
+			//TE_SetupBeamFollow(ent, BeamSprite, 0, Float:4.0, Float:10.0, Float:10.0, 5, g_AxisColour);
+			//TE_SendToAll();
 
 
 			SetEntPropEnt(ent, Prop_Data, "m_hOwnerEntity", client);
