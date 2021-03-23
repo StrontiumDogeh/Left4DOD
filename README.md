@@ -8,11 +8,9 @@ The source files for Left4DoD, a zombie mod for Day of Defeat: Source.
 - [dodhooks.inc](https://raw.githubusercontent.com/psychonic/dodhooks/master/sourcemod/scripting/include/dodhooks.inc)
 - [morecolors.inc](https://www.doctormckay.com/download/scripting/include/morecolors.inc)
 
-## Official Servers
+## Official Discussion Forum
 
-| IP Address                                                 | Server Name                                                    |
-| ---------------------------------------------------------- | -------------------------------------------------------------- |
-| [tv9.theville.org](steam://connect/tv9.theville.org:27015) | TheVille.org IX - Left4DoD Zombies - Central US [GameME Stats] |
+[TheVille.org Left4Dod Forum](https://www.theville.org/forums/viewforum.php?f=3)
 
 ## License
 
